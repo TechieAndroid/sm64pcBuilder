@@ -16,8 +16,10 @@ BINARY=./build/us_pc/sm64*
 FOLDER_PLACEMENT=C:/sm64pcBuilder
 
 # Command line options
-OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Allow External Resources | Nightly Only" "Remove Extended Options Menu | Remove additional R button menu options" "OpenGL 1.3 Renderer | Unrecommended. Only use if your machine is very old" "Build for the web | Requires emsdk to be installed" "Build for a Raspberry Pi" "Clean build | This deletes the build folder")
-EXTRA=("BETTERCAMERA=1" "NODRAWINGDISTANCE=1" "TEXTURE_FIX=1" "EXTERNAL_DATA=1" "EXT_OPTIONS_MENU=0" "LEGACY_GL=1" "TARGET_WEB=1" "TARGET_RPI=1" "clean")
+MASTER_OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Remove Extended Options Menu | Remove additional R button menu options" "Build for the web | Requires emsdk to be installed" "Build for a Raspberry Pi" "Clean build | This deletes the build folder")
+MASTER_EXTRA=("BETTERCAMERA=1" "NODRAWINGDISTANCE=1" "TEXTURE_FIX=1" "EXT_OPTIONS_MENU=0" "TARGET_WEB=1" "TARGET_RPI=1" "clean")
+NIGHTLY_OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Allow External Resources" "Remove Extended Options Menu | Remove additional R button menu options" "OpenGL 1.3 Renderer | Unrecommended. Only use if your machine is very old" "Build for the web | Requires emsdk to be installed" "Build for a Raspberry Pi" "Clean build | This deletes the build folder")
+NIGHTLY_EXTRA=("BETTERCAMERA=1" "NODRAWINGDISTANCE=1" "TEXTURE_FIX=1" "EXTERNAL_DATA=1" "EXT_OPTIONS_MENU=0" "LEGACY_GL=1" "TARGET_WEB=1" "TARGET_RPI=1" "clean")
 
 # Colors
 RED=$(tput setaf 1)
@@ -65,20 +67,16 @@ cat<<EOF
     ${YELLOW}==============================${RESET}
     ${CYAN}SM64PC Builder${RESET}
     ${YELLOW}------------------------------${RESET}
-    ${RED}READ THIS MESSAGE:${RESET}
+    ${GREEN}Updates:${RESET}
 
-    ${CYAN}You will no longer need to update your build.sh file manually.                    
-    There will now be a sm64pcBuilder folder on your C drive. 
-    This is the folder where your build.sh files will generate,
-    as well as your sm64pc-master or sm64pc-nightly folders.
-    Delete any build.sh file that is outside of sm64pcBuilder.
-    Your old sm64pc-master or sm64pc-nightly folders are
-    in the same location as they were (if you had them).
-    When recompiling run cd c:/sm64pcBuilder then
-    ./build.sh                               
+    ${CYAN}-Separate Nightly And Master Menus                    
+    -Super Mario Sunshine Voice Pack Option 
+    -120 Star Save File Option
+    -Fixed King Bob-omb's Eyes On Nightly
+    -Slimmer Make Clean Code                              
 
     ${RESET}${YELLOW}------------------------------${RESET}
-    ${CYAN}build.sh Update 15${RESET}
+    ${CYAN}build.sh Update 16${RESET}
     ${YELLOW}==============================${RESET}
 
 EOF
@@ -246,10 +244,12 @@ do
     ${YELLOW}------------------------------${RESET}
     ${CYAN}Press a number to select:
 
-    (1) 60 FPS Patch                    
-    (2) 60 FPS Patch Uncapped Framerate 
+    (1) 60 FPS Patch (WIP)                    
+    (2) 60 FPS Patch Uncapped Framerate (WIP)
     (3) HD Mario Model
-    (4) Download Reshade - Post processing effects                  
+    (4) Super Mario Sunshine Mario Voice
+    (5) 120 Star Save | Nightly Only
+    (6) Download Reshade - Post processing effects                  
     (C)ontinue
 
     ${GREEN}Press C without making a selection to
@@ -285,7 +285,19 @@ EOF
 		  rm HD_Mario_model.rar
 		  printf "$\n${GREEN}HD Mario Model Selected${RESET}\n"
             ;;
-    "4")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
+    "4")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232544457523247/Sunshine_Mario_VO.rar
+		  unrar x -o+ Sunshine_Mario_VO.rar
+		  rm Sunshine_Mario_VO.rar
+		  printf "$\n${GREEN}Super Mario Sunshine Mario Voice Selected${RESET}\n"
+            ;;
+    "5")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232280224628796/sm64_save_file.bin
+		  if [ -f $APPDATA/sm64pc/sm64_save_file.bin ]; then
+		  	mv -f $APPDATA/sm64pc/sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.old.bin
+		  	mv sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.bin
+		  fi
+		  printf "$\n${GREEN}120 Star Save Selected${RESET}\n"
+            ;;
+    "6")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
 		  printf "$\n${GREEN}Reshade Downloaded${RESET}\n"
       		;;
     "c")  break                      
@@ -298,31 +310,61 @@ EOF
     sleep 2
 done
 
-#Flags menu
-menu() {
-		printf "\nAvaliable options:\n"
-		for i in ${!OPTIONS[@]}; do 
-				printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${OPTIONS[i]}"
-		done
-		if [[ "$msg" ]]; then echo "$msg"; fi
-		printf "${YELLOW}Please do not select \"Clean build\" with any other option.\n"
-		printf "${RED}WARNING: Backup your save file before selecting \"Clean build\".\n"
-		printf "${CYAN}Press the corresponding number and press enter to select it.\nWhen all desired options are selected, press Enter to continue.\n"
-		printf "${YELLOW}Check Remove Extended Options Menu & leave other options unchecked for a Vanilla\nbuild.\n${RESET}"
-}
+#Master flags menu
+if [ "$I_Want_Master" = true ]; then 
+	menu() {
+			printf "\nAvaliable options:\n"
+			for i in ${!MASTER_OPTIONS[@]}; do 
+					printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${MASTER_OPTIONS[i]}"
+			done
+			if [[ "$msg" ]]; then echo "$msg"; fi
+			printf "${YELLOW}Please do not select \"Clean build\" with any other option.\n"
+			printf "${RED}WARNING: Backup your save file before selecting \"Clean build\".\n"
+			printf "${CYAN}Press the corresponding number and press enter to select it.\nWhen all desired options are selected, press Enter to continue.\n"
+			printf "${YELLOW}Check Remove Extended Options Menu & leave other options unchecked for a Vanilla\nbuild.\n${RESET}"
+	}
 
-prompt="Check an option (again to uncheck, press ENTER):"$'\n'
-while menu && read -rp "$prompt" num && [[ "$num" ]]; do
-		[[ "$num" != *[![:digit:]]* ]] &&
-		(( num > 0 && num <= ${#OPTIONS[@]} )) ||
-		{ msg="Invalid option: $num"; continue; }
-		((num--)); # msg="${OPTIONS[num]} was ${choices[num]:+un}checked"
-		[[ "${choices[num]}" ]] && choices[num]="" || choices[num]="+"
-done
+	prompt="Check an option (again to uncheck, press ENTER):"$'\n'
+	while menu && read -rp "$prompt" num && [[ "$num" ]]; do
+			[[ "$num" != *[![:digit:]]* ]] &&
+			(( num > 0 && num <= ${#MASTER_OPTIONS[@]} )) ||
+			{ msg="Invalid option: $num"; continue; }
+			((num--)); # msg="${MASTER_OPTIONS[num]} was ${choices[num]:+un}checked"
+			[[ "${choices[num]}" ]] && choices[num]="" || choices[num]="+"
+	done
 
-for i in ${!OPTIONS[@]}; do 
-		[[ "${choices[i]}" ]] && { CMDL+=" ${EXTRA[i]}"; }
-done 
+	for i in ${!MASTER_OPTIONS[@]}; do 
+			[[ "${choices[i]}" ]] && { CMDL+=" ${MASTER_EXTRA[i]}"; }
+	done
+fi
+
+#Master flags menu
+if [ "$I_Want_Nightly" = true ]; then 
+	menu() {
+			printf "\nAvaliable options:\n"
+			for i in ${!NIGHTLY_OPTIONS[@]}; do 
+					printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${NIGHTLY_OPTIONS[i]}"
+			done
+			if [[ "$msg" ]]; then echo "$msg"; fi
+			printf "${YELLOW}Please do not select \"Clean build\" with any other option.\n"
+			printf "${RED}WARNING: Backup your save file before selecting \"Clean build\".\n"
+			printf "${CYAN}Press the corresponding number and press enter to select it.\nWhen all desired options are selected, press Enter to continue.\n"
+			printf "${YELLOW}Check Remove Extended Options Menu & leave other options unchecked for a Vanilla\nbuild.\n${RESET}"
+	}
+
+	prompt="Check an option (again to uncheck, press ENTER):"$'\n'
+	while menu && read -rp "$prompt" num && [[ "$num" ]]; do
+			[[ "$num" != *[![:digit:]]* ]] &&
+			(( num > 0 && num <= ${#NIGHTLY_OPTIONS[@]} )) ||
+			{ msg="Invalid option: $num"; continue; }
+			((num--)); # msg="${NIGHTLY_OPTIONS[num]} was ${choices[num]:+un}checked"
+			[[ "${choices[num]}" ]] && choices[num]="" || choices[num]="+"
+	done
+
+	for i in ${!NIGHTLY_OPTIONS[@]}; do 
+			[[ "${choices[i]}" ]] && { CMDL+=" ${NIGHTLY_EXTRA[i]}"; }
+	done
+fi
 
 #Checks the computer architecture
 if [ "${CMDL}" != " clean" ] && [ `getconf LONG_BIT` = "64" ]; then
@@ -356,6 +398,10 @@ if [ "${CMDL}" != " clean" ] && [ `getconf LONG_BIT` = "64" ]; then
 		if [ -f ReShade_Setup_4.6.1.exe ]; then
 			mv ./ReShade_Setup_4.6.1.exe ./build/us_pc/ReShade_Setup_4.6.1.exe
 		fi
+		if [ -d ./build/us_pc/res ]; then
+			wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
+			mv -f king_bob-omb_eyes.rgba16.png ./build/us_pc/res/actors/king_bobomb/king_bob-omb_eyes.rgba16.png
+		fi
     	printf "\n${GREEN}The sm64pc binary is now available in the 'build/us_pc/' folder.\n"
 		printf "\n${YELLOW}If fullscreen doesn't seem like the correct resolution, then right click on the\nexe, go to properties, compatibility, then click Change high DPI settings.\nCheck the 'Override high DPI scaling behavior' checkmark, leave it on\napplication, then press apply."
 		cd ./build/us_pc/
@@ -369,15 +415,8 @@ if [ "${CMDL}" != " clean" ] && [ `getconf LONG_BIT` = "64" ]; then
 	fi
 	
 else
-	if [ `getconf LONG_BIT` = "64" ]; then
-		printf "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
-		PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
-	else
-		if [ `getconf LONG_BIT` = "32" ]; then
-		printf "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
-		PATH=/mingw32/bin:/mingw64/bin:$PATH make $CMDL $1
-		fi
-	fi
+	printf "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
+	make $CMDL $1
 	printf "\nYour build is now clean.\n"
 	return 2> /dev/null
 fi 
