@@ -44,7 +44,7 @@ if [ ! -d "$FOLDER_PLACEMENT" ]; then
 	mv ./sm64pcBuilder c:/sm64pcBuilder
 	cd c:/sm64pcBuilder
 	printf "\n${GREEN}RESTARTING\n"
-	./build.sh
+	./build.sh $1
 fi
 
 #Update check
@@ -56,7 +56,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 	git pull https://github.com/gunvalk/sm64pcBuilder
 	printf "\n${GREEN}RESTARTING - ANSWER ${RESET}${RED}NO ${RESET}${GREEN}WHEN ASKED ABOUT UPDATES THIS TIME.${RESET}\n"
 	sleep 2
-	./build.sh
+	./build.sh $1
 fi
 printf "\n"
 
