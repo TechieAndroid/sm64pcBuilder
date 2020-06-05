@@ -130,6 +130,9 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 			git stash push
 			git stash drop
 			git pull https://github.com/sm64pc/sm64pc
+			if [ -f ./build.sh ]; then
+				rm ./build.sh
+			fi
 			I_Want_Nightly=true
 			cd ../
 		else
@@ -137,10 +140,16 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 				printf "\n"
 				mv sm64pc-nightly sm64pc-nightly.old
 				git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+				if [ -f ./sm64pc-nightly/build.sh ]; then
+					rm ./sm64pc-nightly/build.sh
+				fi
 				I_Want_Nightly=true
 			else
 				printf "\n"
 				git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+				if [ -f ./sm64pc-nightly/build.sh ]; then
+					rm ./sm64pc-nightly/build.sh
+				fi
 				I_Want_Nightly=true
 			fi
 		fi
