@@ -63,7 +63,10 @@ fi
 printf "\n"
 
 #Update message
-cat<<EOF
+while :
+do
+    clear
+    cat<<EOF
     ${YELLOW}==============================${RESET}
     ${CYAN}SM64PC Builder${RESET}
     ${YELLOW}------------------------------${RESET}
@@ -75,13 +78,22 @@ cat<<EOF
     -Fixed King Bob-omb's Eyes On Nightly
     -Slimmer Make Clean Code                              
 
+    (C)ontinue
+    
     ${RESET}${YELLOW}------------------------------${RESET}
     ${CYAN}build.sh Update 16${RESET}
     ${YELLOW}==============================${RESET}
 
 EOF
-	break 2> /dev/null
-	read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
+read -n1 -s
+    case "$REPLY" in
+    "c")  break
+			;;
+     * )  echo "invalid option"     
+            ;;
+    esac
+    sleep 2
+done
 
 # Gives options to download from the Github
 printf "\n${GREEN}Would you like to download or update the latest source files from Github? ${CYAN}(y/n) ${RESET}\n"
@@ -406,17 +418,12 @@ if [ "${CMDL}" != " clean" ] && [ `getconf LONG_BIT` = "64" ]; then
 		printf "\n${YELLOW}If fullscreen doesn't seem like the correct resolution, then right click on the\nexe, go to properties, compatibility, then click Change high DPI settings.\nCheck the 'Override high DPI scaling behavior' checkmark, leave it on\napplication, then press apply."
 		cd ./build/us_pc/
 		start .
-		break 2> /dev/null
-		return 2> /dev/null
 	else
     	printf "\n${RED}Oh no! Something went wrong."
-	break 2> /dev/null
-	return 2> /dev/null
 	fi
 	
 else
 	printf "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
 	make $CMDL $1
 	printf "\nYour build is now clean.\n"
-	return 2> /dev/null
 fi 
