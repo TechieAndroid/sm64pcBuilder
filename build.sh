@@ -268,9 +268,10 @@ do
     (1) 60 FPS Patch (WIP)                    
     (2) 60 FPS Patch Uncapped Framerate (WIP)
     (3) HD Mario Model
-    (4) Super Mario Sunshine Mario Voice
-    (5) 120 Star Save | Nightly Only
-    (6) Download Reshade - Post processing effects                  
+    (4) HD Coin Model
+    (5) Super Mario Sunshine Mario Voice
+    (6) 120 Star Save | Nightly Only
+    (7) Download Reshade - Post processing effects                  
     (C)ontinue
 
     ${GREEN}Press C without making a selection to
@@ -306,19 +307,30 @@ EOF
 		  rm HD_Mario_model.rar
 		  printf "$\n${GREEN}HD Mario Model Selected${RESET}\n"
             ;;
-    "4")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232544457523247/Sunshine_Mario_VO.rar
+    "4")  if [[ -f "./enhancements/coin.patch" ]]; then
+			git apply ./enhancements/coin.patch  --ignore-whitespace --reject
+			printf "$\n${GREEN}HD Coin Model Selected${RESET}\n"
+		  else
+			cd ./enhancements
+		  	wget https://cdn.discordapp.com/attachments/710283360794181633/718523593180577882/coin.patch
+		  	cd ../
+	      	git apply ./enhancements/coin.patch --ignore-whitespace --reject
+          	printf "$\n${GREEN}HD Coin Model Selected${RESET}\n"
+          fi 
+            ;;
+    "5")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232544457523247/Sunshine_Mario_VO.rar
 		  unrar x -o+ Sunshine_Mario_VO.rar
 		  rm Sunshine_Mario_VO.rar
 		  printf "$\n${GREEN}Super Mario Sunshine Mario Voice Selected${RESET}\n"
             ;;
-    "5")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232280224628796/sm64_save_file.bin
+    "6")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232280224628796/sm64_save_file.bin
 		  if [ -f $APPDATA/sm64pc/sm64_save_file.bin ]; then
 		  	mv -f $APPDATA/sm64pc/sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.old.bin
 		  	mv sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.bin
 		  fi
 		  printf "$\n${GREEN}120 Star Save Selected${RESET}\n"
             ;;
-    "6")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
+    "7")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
 		  printf "$\n${GREEN}Reshade Downloaded${RESET}\n"
       		;;
     "c")  break                      
