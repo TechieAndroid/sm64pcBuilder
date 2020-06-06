@@ -34,7 +34,7 @@ if [ -n "${JOBS}" ]; then
 fi
 
 # Checks for common required executables (make, git, gcc) and installs them if they are missing
-if  [[ ! $(command -v make) && ! $(command -v git) && ! $(command -v gcc) ]]; then
+if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 	echo -e "\n${RED}Dependencies are missing. Proceeding with the installation... ${RESET}\n" >&2
 	pacman -Sy --needed base-devel mingw-w64-i686-toolchain mingw-w64-x86_64-toolchain \
                     git subversion mercurial \
