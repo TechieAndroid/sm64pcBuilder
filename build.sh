@@ -59,7 +59,7 @@ if [ -f $HOME/build.sh ]; then
 fi
 
 #Update check
-echo -e "\n${GREEN}Would you like to check for build.sh updates? ${CYAN}(y/n) ${RESET}\n"
+echo -e "\n${GREEN}Would you like to check for build.sh updates? ${CYAN}(y/n) ${RESET}"
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
 	git stash push
@@ -90,10 +90,10 @@ ${YELLOW}==============================${RESET}"
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
 
 # Gives options to download from the Github
-echo -e "\n${GREEN}Would you like to download or update the latest source files from Github? ${CYAN}(y/n) ${RESET}\n"
+echo -e "\n${GREEN}Would you like to download or update the latest source files from Github? ${CYAN}(y/n) ${RESET}"
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-	echo -e "\n${GREEN}THE MASTER HAS NOT BEEN UPDATED IN A WHILE DOWNLOAD THE NIGHTLY!${CYAN}(master/nightly) ${RESET}\n"
+	echo -e "\n${GREEN}THE MASTER HAS NOT BEEN UPDATED IN A WHILE DOWNLOAD THE NIGHTLY!${CYAN}(master/nightly) ${RESET}"
     read answer
 	if [ "$answer" != "${answer#[Mm]}" ] ;then
 		# Checks for existence of previous .git folder, then creates one if it doesn't exist and moves the old folder
@@ -145,7 +145,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 		fi
 	fi
 else
-    echo -e "\n${GREEN}Are you building master or nightly? (master/nightly) ${RESET}\n"
+    echo -e "\n${GREEN}Are you building master or nightly? (master/nightly) ${RESET}"
 	read answer
 	if [ "$answer" != "${answer#[Mm]}" ] ;then
 		I_Want_Master=true
@@ -236,10 +236,10 @@ ${CYAN}Press a number to select:
 (2) 60 FPS Patch Uncapped Framerate (WIP)
 (3) HD Mario Model
 (4) HD Coin Patch
-(5) Hypatia´s Mario Craft 64 | Nightly Only
-(6) Super Mario Sunshine Mario Voice
-(7) 120 Star Save | Nightly Only
-(8) Download Reshade - Post processing effects                  
+(5) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}
+${CYAN}(6) Super Mario Sunshine Mario Voice
+(7) 120 Star Save | ${RED}Nightly Only${RESET}
+${CYAN}(8) Download Reshade - Post processing effects                  
 (U)ninstall Patches
 (C)ontinue
 
@@ -287,13 +287,10 @@ ${RESET}${YELLOW}------------------------------${RESET}"
           	echo -e "$\n${GREEN}HD Coin Model Selected${RESET}\n"
           fi 
             ;;
-    "5")  wget https://cdn.discordapp.com/attachments/718584345912148100/718678453586755584/HypatiasMarioKraftComplete.part1.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718678556179431504/HypatiasMarioKraftComplete.part2.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718678588320382986/HypatiasMarioKraftComplete.part3.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718678601469526086/HypatiasMarioKraftComplete.part4.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718678609472126976/HypatiasMarioKraftComplete.part5.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718678507110269200/HypatiasMarioKraftComplete.part6.rar
-          if [ ! -f HypatiasMarioKraftComplete.part6.rar ]; then
+    "5")  wget https://cdn.discordapp.com/attachments/718584345912148100/718901885657940091/Hypatia_Mario_Craft_Complete.part1.rar
+          wget https://cdn.discordapp.com/attachments/718584345912148100/718902211165290536/Hypatia_Mario_Craft_Complete.part2.rar
+          wget https://cdn.discordapp.com/attachments/718584345912148100/718902377553592370/Hypatia_Mario_Craft_Complete.part3.rar
+          if [ ! -f Hypatia_Mario_Craft_Complete.part3.rar ]; then
           	echo -e "${RED}Your download fucked up"
           else
           	echo -e "$\n${GREEN}Hypatia´s Mario Craft 64 Selected${RESET}\n"
@@ -437,12 +434,12 @@ if [ "${CMDL}" != " clean" ]; then
 		if [ -d ./build/us_pc/res ]; then
 			wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
 			mv -f king_bob-omb_eyes.rgba16.png ./build/us_pc/res/actors/king_bobomb/king_bob-omb_eyes.rgba16.png
-			if [ -f HypatiasMarioKraftComplete.part6.rar ]; then
-				unrar x -o+ HypatiasMarioKraftComplete.part1.rar ./build/us_pc/
-            	rm Hypatias*
+			if [ -f Hypatia_Mario_Craft_Complete.part3.rar ]; then
+				unrar x -o+ Hypatia_Mario_Craft_Complete.part1.rar ./build/us_pc/
+            	rm Hypatia*
 			fi
 		fi
-    	echo -e "\n${GREEN}The sm64pc binary is now available in the 'build/us_pc/' folder.\n"
+    	echo -e "\n${GREEN}The sm64pc binary is now available in the 'build/us_pc/' folder."
 		echo -e "\n${YELLOW}If fullscreen doesn't seem like the correct resolution, then right click on the\nexe, go to properties, compatibility, then click Change high DPI settings.\nCheck the 'Override high DPI scaling behavior' checkmark, leave it on\napplication, then press apply."
 		cd ./build/us_pc/
 		start .
