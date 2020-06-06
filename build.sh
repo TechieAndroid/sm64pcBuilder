@@ -49,6 +49,15 @@ if [ ! -d "$FOLDER_PLACEMENT" ]; then
 	exec ./build.sh $1
 fi
 
+#Delete their setup or old shit
+if [ -f $HOME/build-setup.sh ]; then
+	rm $HOME/build-setup.sh
+fi
+
+if [ -f $HOME/build.sh ]; then
+	rm $HOME/build.sh
+fi
+
 #Update check
 echo -e "\n${GREEN}Would you like to check for build.sh updates? ${CYAN}(y/n) ${RESET}\n"
 read answer
