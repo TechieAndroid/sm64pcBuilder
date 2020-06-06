@@ -287,15 +287,13 @@ ${RESET}${YELLOW}------------------------------${RESET}"
           	echo -e "$\n${GREEN}HD Coin Model Selected${RESET}\n"
           fi 
             ;;
-    "5")  wget https://cdn.discordapp.com/attachments/718584345912148100/718586915464413275/Hypatia_Mario_Craft_64.part1.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718587663413805098/Hypatia_Mario_Craft_64.part2.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718588295579435089/Hypatia_Mario_Craft_64.part3.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718589155936043076/Hypatia_Mario_Craft_64.part4.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718589896624832632/Hypatia_Mario_Craft_64.part5.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718590449346150480/Hypatia_Mario_Craft_64.part6.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718592643973644338/Hypatia_Mario_Craft_64.part7.rar
-          wget https://cdn.discordapp.com/attachments/718584345912148100/718593036090867792/Hypatia_Mario_Craft_64.part8.rar
-          if [ ! -f Hypatia_Mario_Craft_64.part8.rar ]; then
+    "5")  wget https://cdn.discordapp.com/attachments/718584345912148100/718678453586755584/HypatiasMarioKraftComplete.part1.rar
+          wget https://cdn.discordapp.com/attachments/718584345912148100/718678556179431504/HypatiasMarioKraftComplete.part2.rar
+          wget https://cdn.discordapp.com/attachments/718584345912148100/718678588320382986/HypatiasMarioKraftComplete.part3.rar
+          wget https://cdn.discordapp.com/attachments/718584345912148100/718678601469526086/HypatiasMarioKraftComplete.part4.rar
+          wget https://cdn.discordapp.com/attachments/718584345912148100/718678609472126976/HypatiasMarioKraftComplete.part5.rar
+          wget https://cdn.discordapp.com/attachments/718584345912148100/718678507110269200/HypatiasMarioKraftComplete.part6.rar
+          if [ ! -f HypatiasMarioKraftComplete.part6.rar ]; then
           	echo -e "${RED}Your download fucked up"
           else
           	echo -e "$\n${GREEN}Hypatia´s Mario Craft 64 Selected${RESET}\n"
@@ -439,9 +437,9 @@ if [ "${CMDL}" != " clean" ]; then
 		if [ -d ./build/us_pc/res ]; then
 			wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
 			mv -f king_bob-omb_eyes.rgba16.png ./build/us_pc/res/actors/king_bobomb/king_bob-omb_eyes.rgba16.png
-			if [ -f Hypatia_Mario_Craft_64.part8.rar ]; then
-				unrar x -o+ Hypatia_Mario_Craft_64.part1.rar ./build/us_pc/
-            	rm Hypatia*
+			if [ -f HypatiasMarioKraftComplete.part6.rar ]; then
+				unrar x -o+ HypatiasMarioKraftComplete.part1.rar ./build/us_pc/
+            	rm Hypatias*
 			fi
 		fi
     	echo -e "\n${GREEN}The sm64pc binary is now available in the 'build/us_pc/' folder.\n"
