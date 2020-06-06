@@ -233,7 +233,7 @@ ${CYAN}Press a number to select:
 (2) 60 FPS Patch Uncapped Framerate (WIP)
 (3) HD Mario Model
 (4) HD Coin Patch
-(5) Hypatia´s Mario Craft 64
+(5) Hypatia´s Mario Craft 64 | Nightly Only
 (6) Super Mario Sunshine Mario Voice
 (7) 120 Star Save | Nightly Only
 (8) Download Reshade - Post processing effects                  
