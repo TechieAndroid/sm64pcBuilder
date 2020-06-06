@@ -28,11 +28,6 @@ YELLOW=$(tput setaf 3)
 CYAN=$(tput setaf 6)
 RESET=$(tput sgr0)
 
-JOBS=$(grep -c ^processor /proc/cpuinfo)
-if [ -n "${JOBS}" ]; then
-	JOBS=1
-fi
-
 # Checks for common required executables (make, git, gcc) and installs them if they are missing
 if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 	echo -e "\n${RED}Dependencies are missing. Proceeding with the installation... ${RESET}\n" >&2
@@ -77,8 +72,7 @@ ${GREEN}Updates:${RESET}
 ${CYAN}-Code Fixes                    
 -HD Coin Patch Option 
 -Hypatia's Mario Craft Option
--Patch Uninstall Menu
--Using -J No Longer Works                              
+-Patch Uninstall Menu                             
 
 ${RESET}${YELLOW}------------------------------${RESET}
 ${CYAN}build.sh Update 17${RESET}
@@ -196,8 +190,8 @@ else
 	echo -e "\n${YELLOW} Executing: ${CYAN}./configure --disable-docs${RESET}\n\n"
 	PATH=/mingw64/bin:/mingw32/bin:$PATH LIBS=-lstdc++ ./configure --disable-docs
 
-	echo -e "\n${YELLOW} Executing: ${CYAN}make -j${JOBS}${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make -j${JOBS}
+	echo -e "\n${YELLOW} Executing: ${CYAN}make $1${RESET}\n\n"
+	PATH=/mingw64/bin:/mingw32/bin:$PATH make $1
 
     echo -e "\n${YELLOW} Making new directory ${CYAN}../lib${RESET}\n\n"
 	mkdir ../lib
@@ -212,8 +206,8 @@ else
 	sed -i 's/tabledesign_CFLAGS := -Wno-uninitialized -laudiofile/tabledesign_CFLAGS := -Wno-uninitialized -laudiofile -lstdc++/g' Makefile
 
 	#Checks the computer architecture
-	echo -e "${YELLOW} Executing: ${CYAN}make -j${JOBS}${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make -j${JOBS}
+	echo -e "${YELLOW} Executing: ${CYAN}make $1${RESET}\n\n"
+	PATH=/mingw64/bin:/mingw32/bin:$PATH make $1
 
     echo -e "\n${YELLOW} Going up one directory.${RESET}\n"
 		cd ../
@@ -425,8 +419,8 @@ fi
 
 #Checks the computer architecture
 if [ "${CMDL}" != " clean" ]; then
-	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} -j${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL -j${JOBS}
+	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
+	PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
 
 	if ls $BINARY 1> /dev/null 2>&1; then
 		if [ -f ReShade_Setup_4.6.1.exe ]; then
@@ -451,7 +445,7 @@ if [ "${CMDL}" != " clean" ]; then
 	
 else
 
-	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} -j${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL -j${JOBS}
+	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
+	PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
 	echo -e "${GREEN}\nYour build is now clean.\n"
 fi 
