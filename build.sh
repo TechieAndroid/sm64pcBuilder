@@ -434,8 +434,8 @@ ${CYAN}Texture Packs Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
-(1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}${CYAN}
-(C)ontinue
+(1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}
+${CYAN}(C)ontinue
 
 ${GREEN}Press C to continue${RESET}
 ${RESET}${YELLOW}------------------------------${RESET}"
@@ -471,7 +471,7 @@ ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
 (1) 120 Star Save | ${RED}Nightly Only${RESET}
-(C)ontinue
+${CYAN}(C)ontinue
 
 ${GREEN}Press C to continue${RESET}
 ${RESET}${YELLOW}------------------------------${RESET}"
