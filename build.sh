@@ -247,7 +247,7 @@ do
 "${YELLOW}==============================${RESET}
 ${CYAN}Add-ons Menu${RESET}
 ${YELLOW}------------------------------${RESET}
-${CYAN}Press a number to select:
+${CYAN}Press a letter to select:
 
 (E)nhancements
 (M)odels
