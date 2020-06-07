@@ -14,6 +14,7 @@ ROM_CHECK=./baserom.us.z64
 NIGHTLY_OLD=./sm64pc-nightly.old/baserom.us.z64
 BINARY=./build/us_pc/sm64*
 FOLDER_PLACEMENT=C:/sm64pcBuilder
+MACHINE_TYPE=`uname -m`
 
 # Command line options
 MASTER_OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Remove Extended Options Menu | Remove additional R button menu options" "Clean build | This deletes the build folder")
@@ -78,13 +79,14 @@ ${CYAN}SM64PC Builder${RESET}
 ${YELLOW}------------------------------${RESET}
 ${GREEN}Updates:${RESET}
 
-${CYAN}-Code Fixes                    
--HD Coin Patch Option 
--Hypatia's Mario Craft Option
--Patch Uninstall Menu
+${CYAN}-Patch Menu -> Add-ons Menu
+-Submenus
+-New Models (Old School HD Mario,
+ HD Bowser, 3D Coin Patch v2)
+-32bit Compiling Fixed
 
 ${RESET}${YELLOW}------------------------------${RESET}
-${CYAN}build.sh Update 17${RESET}
+${CYAN}build.sh Update 18${RESET}
 ${YELLOW}==============================${RESET}"
 
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
@@ -197,10 +199,20 @@ else
 	autoreconf -i
 
 	echo -e "\n${YELLOW} Executing: ${CYAN}./configure --disable-docs${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH LIBS=-lstdc++ ./configure --disable-docs
+
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+	  PATH=/mingw64/bin:/mingw32/bin:$PATH LIBS=-lstdc++ ./configure --disable-docs
+	else
+	  PATH=/mingw32/bin:$PATH LIBS=-lstdc++ ./configure --disable-docs
+	fi
 
 	echo -e "\n${YELLOW} Executing: ${CYAN}make $1${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make $1
+
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+	  PATH=/mingw64/bin:/mingw32/bin:$PATH make $1
+	else
+	  PATH=/mingw32/bin:$PATH make $1
+	fi
 
     echo -e "\n${YELLOW} Making new directory ${CYAN}../lib${RESET}\n\n"
 	mkdir ../lib
@@ -216,35 +228,56 @@ else
 
 	#Checks the computer architecture
 	echo -e "${YELLOW} Executing: ${CYAN}make $1${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make $1
+
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+	  PATH=/mingw64/bin:/mingw32/bin:$PATH make $1
+	else
+	  PATH=/mingw32/bin:$PATH make $1
+	fi
 
     echo -e "\n${YELLOW} Going up one directory.${RESET}\n"
 		cd ../
 fi 
 
-#Patch menu
+#Add-ons Menu
 while :
 do
     clear
 	echo \
 "${YELLOW}==============================${RESET}
-${CYAN}Patch Menu${RESET}
+${CYAN}Add-ons Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
-(1) 60 FPS Patch (WIP)                    
-(2) 60 FPS Patch Uncapped Framerate (WIP)
-(3) HD Mario Model
-(4) HD Coin Patch
-(5) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}
-${CYAN}(6) Super Mario Sunshine Mario Voice
-(7) 120 Star Save | ${RED}Nightly Only${RESET}
-${CYAN}(8) Download Reshade - Post processing effects                  
+(E)nhancements
+(M)odels
+(S)ound Packs
+(T)exture Packs
+(V)arious
 (U)ninstall Patches
 (C)ontinue
 
 ${GREEN}Press C without making a selection to
 continue with no patches.${RESET}
+${RESET}${YELLOW}------------------------------${RESET}"
+
+    read -n1 -s
+    case "$REPLY" in
+    "e")  while :
+do
+    clear
+	echo \
+"${YELLOW}==============================${RESET}
+${CYAN}Enhancements Menu${RESET}
+${YELLOW}------------------------------${RESET}
+${CYAN}Press a number to select:
+
+(1) 60 FPS Patch (WIP)
+(2) 60 FPS Patch Uncapped Framerate (WIP)
+(3) Download Reshade - Post processing effects
+(C)ontinue
+
+${GREEN}Press C to continue${RESET}
 ${RESET}${YELLOW}------------------------------${RESET}"
 
     read -n1 -s
@@ -271,23 +304,145 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  	echo -e "$\n${GREEN}60 FPS Patch Uncapped Framerate Selected${RESET}\n"
 		  fi
             ;;
-    "3")  wget https://cdn.discordapp.com/attachments/710283360794181633/717479061664038992/HD_Mario_Model.rar
+    "3")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
+		  echo -e "$\n${GREEN}Reshade Downloaded${RESET}\n"
+      		;;
+    "c")  break                      
+            ;;
+    "C")  echo "use lower case c!!"   
+            ;; 
+     * )  echo "invalid option"     
+            ;;
+    esac
+    sleep 2
+done
+			;;
+    "m")  while :
+do
+    clear
+	echo \
+"${YELLOW}==============================${RESET}
+${CYAN}Models Menu${RESET}
+${YELLOW}------------------------------${RESET}
+${CYAN}Press a number to select:
+
+(1) HD Mario
+(2) Old School HD Mario
+(3) HD Bowser
+(4) 3D Coin Patch v2
+(C)ontinue
+
+${GREEN}Press C to continue${RESET}
+${RESET}${YELLOW}------------------------------${RESET}"
+
+    read -n1 -s
+    case "$REPLY" in
+    "1")  wget https://cdn.discordapp.com/attachments/710283360794181633/717479061664038992/HD_Mario_Model.rar
 		  unrar x -o+ HD_Mario_Model.rar
 		  rm HD_Mario_model.rar
-		  echo -e "$\n${GREEN}HD Mario Model Selected${RESET}\n"
+		  echo -e "$\n${GREEN}HD Mario Selected${RESET}\n"
             ;;
-    "4")  if [[ -f "./enhancements/coin.patch" ]]; then
-			git apply ./enhancements/coin.patch  --ignore-whitespace --reject
-			echo -e "$\n${GREEN}HD Coin Model Selected${RESET}\n"
+    "2")  wget https://cdn.discordapp.com/attachments/718584345912148100/718935637184610384/Old_School_HD_Mario_Model.rar
+		  unrar x -o+ Old_School_HD_Mario_Model.rar
+		  rm Old_School_HD_Mario_Model.rar
+		  echo -e "$\n${GREEN}Old School HD Mario Selected${RESET}\n"
+            ;;
+    "3")  wget https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar
+		  unrar x -o+ hd_bowser.rar
+		  rm hd_bowser.rar
+		  echo -e "$\n${GREEN}HD Bowser Selected${RESET}\n"
+            ;;
+    "4")  if [[ -f "./enhancements/3d_coin_v2.patch" ]]; then
+			git apply ./enhancements/3d_coin_v2.patch  --ignore-whitespace --reject
+			echo -e "$\n${GREEN}3D Coin Patch v2 Selected${RESET}\n"
 		  else
 			cd ./enhancements
-		  	wget https://cdn.discordapp.com/attachments/710283360794181633/718523593180577882/coin.patch
+		  	wget https://cdn.discordapp.com/attachments/716459185230970880/718674249631662120/3d_coin_v2.patch
 		  	cd ../
-	      	git apply ./enhancements/coin.patch --ignore-whitespace --reject
-          	echo -e "$\n${GREEN}HD Coin Model Selected${RESET}\n"
+	      	git apply ./enhancements/3d_coin_v2.patch --ignore-whitespace --reject
+          	echo -e "$\n${GREEN}3D Coin Patch v2 Selected${RESET}\n"
           fi 
             ;;
-    "5")  wget https://cdn.discordapp.com/attachments/718584345912148100/718901885657940091/Hypatia_Mario_Craft_Complete.part1.rar
+    #"5")  wget https://cdn.discordapp.com/attachments/716459185230970880/718994292311326730/Hi_Poly_MIPS.rar
+		  #unrar x -o+ Hi_Poly_MIPS.rar
+		  #rm Hi_Poly_MIPS.rar
+		  #echo -e "$\n${GREEN}Hi-Poly MIPS Selected${RESET}\n"
+            #;;
+    #"6")  wget https://cdn.discordapp.com/attachments/716459185230970880/718999316194263060/Mario_Party_Whomp.rar
+		  #unrar x -o+ Mario_Party_Whomp.rar
+		  #rm Mario_Party_Whomp.rar
+		  #echo -e "$\n${GREEN}Mario Party Whomp Selected${RESET}\n"
+            #;;
+    #"7")  wget https://cdn.discordapp.com/attachments/716459185230970880/719001278184685598/Mario_Party_Piranha_Plant.rar
+		  #unrar x -o+ Mario_Party_Piranha_Plant.rar
+		  #rm Mario_Party_Piranha_Plant.rar
+		  #echo -e "$\n${GREEN}Mario Party Piranha Plant Selected${RESET}\n"
+            #;;
+    #"8")  wget https://cdn.discordapp.com/attachments/716459185230970880/719004227464331394/Hi_Poly_Penguin_1.4.rar
+		  #unrar x -o+ Hi_Poly_Penguin_1.4.rar
+		  #rm Hi_Poly_Penguin_1.4.rar
+		  #echo -e "$\n${GREEN}Hi-Poly Penguin 1.4 Selected${RESET}\n"
+            #;;
+    "c")  break                      
+            ;;
+    "C")  echo "use lower case c!!"   
+            ;; 
+     * )  echo "invalid option"     
+            ;;
+    esac
+    sleep 2
+done
+			;;
+    "s")  while :
+do
+    clear
+	echo \
+"${YELLOW}==============================${RESET}
+${CYAN}Sound Packs Menu${RESET}
+${YELLOW}------------------------------${RESET}
+${CYAN}Press a number to select:
+
+(1) Super Mario Sunshine Mario Voice
+(C)ontinue
+
+${GREEN}Press C to continue${RESET}
+${RESET}${YELLOW}------------------------------${RESET}"
+
+    read -n1 -s
+    case "$REPLY" in
+    "1")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232544457523247/Sunshine_Mario_VO.rar
+		  unrar x -o+ Sunshine_Mario_VO.rar
+		  rm Sunshine_Mario_VO.rar
+		  echo -e "$\n${GREEN}Super Mario Sunshine Mario Voice Selected${RESET}\n"
+            ;;
+    "c")  break                      
+            ;;
+    "C")  echo "use lower case c!!"   
+            ;; 
+     * )  echo "invalid option"     
+            ;;
+    esac
+    sleep 2
+done
+			;;
+    "t")  while :
+do
+    clear
+	echo \
+"${YELLOW}==============================${RESET}
+${CYAN}Texture Packs Menu${RESET}
+${YELLOW}------------------------------${RESET}
+${CYAN}Press a number to select:
+
+(1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}${CYAN}
+(C)ontinue
+
+${GREEN}Press C to continue${RESET}
+${RESET}${YELLOW}------------------------------${RESET}"
+
+    read -n1 -s
+    case "$REPLY" in
+    "1")  wget https://cdn.discordapp.com/attachments/718584345912148100/718901885657940091/Hypatia_Mario_Craft_Complete.part1.rar
           wget https://cdn.discordapp.com/attachments/718584345912148100/718902211165290536/Hypatia_Mario_Craft_Complete.part2.rar
           wget https://cdn.discordapp.com/attachments/718584345912148100/718902377553592370/Hypatia_Mario_Craft_Complete.part3.rar
           if [ ! -f Hypatia_Mario_Craft_Complete.part3.rar ]; then
@@ -296,33 +451,62 @@ ${RESET}${YELLOW}------------------------------${RESET}"
           	echo -e "$\n${GREEN}Hypatia´s Mario Craft 64 Selected${RESET}\n"
           fi
             ;;
-    "6")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232544457523247/Sunshine_Mario_VO.rar
-		  unrar x -o+ Sunshine_Mario_VO.rar
-		  rm Sunshine_Mario_VO.rar
-		  echo -e "$\n${GREEN}Super Mario Sunshine Mario Voice Selected${RESET}\n"
+    "c")  break                      
             ;;
-    "7")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232280224628796/sm64_save_file.bin
+    "C")  echo "use lower case c!!"   
+            ;; 
+     * )  echo "invalid option"     
+            ;;
+    esac
+    sleep 2
+done
+			;;
+    "v")  while :
+do
+    clear
+	echo \
+"${YELLOW}==============================${RESET}
+${CYAN}Various Menu${RESET}
+${YELLOW}------------------------------${RESET}
+${CYAN}Press a number to select:
+
+(1) 120 Star Save | ${RED}Nightly Only${RESET}
+(C)ontinue
+
+${GREEN}Press C to continue${RESET}
+${RESET}${YELLOW}------------------------------${RESET}"
+
+    read -n1 -s
+    case "$REPLY" in
+    "1")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232280224628796/sm64_save_file.bin
 		  if [ -f $APPDATA/sm64pc/sm64_save_file.bin ]; then
 		  	mv -f $APPDATA/sm64pc/sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.old.bin
 		  	mv sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.bin
 		  fi
 		  echo -e "$\n${GREEN}120 Star Save Selected${RESET}\n"
             ;;
-    "8")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
-		  echo -e "$\n${GREEN}Reshade Downloaded${RESET}\n"
-      		;;
+    "c")  break                      
+            ;;
+    "C")  echo "use lower case c!!"   
+            ;; 
+     * )  echo "invalid option"     
+            ;;
+    esac
+    sleep 2
+done
+			;;
     "u")  while :
 do
     clear
 	echo \
 "${YELLOW}==============================${RESET}
-${CYAN}Patch Menu${RESET}
+${CYAN}Uninstall Patch Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
 (1) Uninstall 60 FPS Patch (WIP)                    
 (2) Uninstall 60 FPS Patch Uncapped Framerate (WIP)
-(3) Uninstall HD Coin Patch                
+(3) Uninstall 3D Coin Patch v2                
 (C)ontinue
 
 ${GREEN}Press C to continue${RESET}
@@ -340,9 +524,9 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 			echo -e "$\n${GREEN}60 FPS Patch Uncapped Framerate Removed${RESET}\n"
 		  fi
             ;;
-    "3")  if [[ -f "./enhancements/coin.patch" ]]; then
-			git apply -R ./enhancements/coin.patch  --ignore-whitespace --reject
-			echo -e "$\n${GREEN}HD Coin Model Removed${RESET}\n"
+    "3")  if [[ -f "./enhancements/3d_coin_v2.patch" ]]; then
+			git apply -R ./enhancements/3d_coin_v2.patch  --ignore-whitespace --reject
+			echo -e "$\n${GREEN}3D Coin Patch v2 Removed${RESET}\n"
 		  fi
 		    ;;
     "c")  break                      
@@ -424,7 +608,12 @@ fi
 #Checks the computer architecture
 if [ "${CMDL}" != " clean" ]; then
 	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
+
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+	  PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
+	else
+	  PATH=/mingw32/bin:$PATH make $CMDL $1
+	fi
 
 	if ls $BINARY 1> /dev/null 2>&1; then
 		if [ -f ReShade_Setup_4.6.1.exe ]; then
@@ -450,6 +639,12 @@ if [ "${CMDL}" != " clean" ]; then
 else
 
 	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
-	PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
+
+	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+	  PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
+	else
+	  PATH=/mingw32/bin:$PATH make $CMDL $1
+	fi
+
 	echo -e "${GREEN}\nYour build is now clean.\n"
 fi
