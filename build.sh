@@ -84,9 +84,11 @@ ${CYAN}-Patch Menu -> Add-ons Menu
 -New Models (Old School HD Mario,
  HD Bowser, 3D Coin Patch v2)
 -32bit Compiling Fixed
+-New external data format w/ zips,
+ Thanks Derailius
 
 ${RESET}${YELLOW}------------------------------${RESET}
-${CYAN}build.sh Update 18${RESET}
+${CYAN}build.sh Update 18.5${RESET}
 ${YELLOW}==============================${RESET}"
 
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
@@ -238,6 +240,9 @@ else
     echo -e "\n${YELLOW} Going up one directory.${RESET}\n"
 		cd ../
 fi 
+#Fix king_bobomb eyes.
+	wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
+	mv -f king_bob-omb_eyes.rgba16.png ./actors/king_bobomb/king_bob-omb_eyes.rgba16.png
 
 #Add-ons Menu
 while :
@@ -402,7 +407,7 @@ ${CYAN}Sound Packs Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
-(1) Super Mario Sunshine Mario Voice
+(1) Super Mario Sunshine Mario Voice | ${RED}Nightly Only, Needs External Resources${CYAN}
 (C)ontinue
 
 ${GREEN}Press C to continue${RESET}
@@ -410,9 +415,10 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 
     read -n1 -s
     case "$REPLY" in
-    "1")  wget https://cdn.discordapp.com/attachments/710283360794181633/718232544457523247/Sunshine_Mario_VO.rar
-		  unrar x -o+ Sunshine_Mario_VO.rar
-		  rm Sunshine_Mario_VO.rar
+    "1")  #wget https://cdn.discordapp.com/attachments/710283360794181633/718232544457523247/Sunshine_Mario_VO.rar
+		  #unrar x -o+ Sunshine_Mario_VO.rar
+		  #rm Sunshine_Mario_VO.rar
+		  wget https://cdn.discordapp.com/attachments/718584345912148100/719492399411232859/sunshinesounds.zip
 		  echo -e "$\n${GREEN}Super Mario Sunshine Mario Voice Selected${RESET}\n"
             ;;
     "c")  break                      
@@ -619,15 +625,31 @@ if [ "${CMDL}" != " clean" ]; then
 		if [ -f ReShade_Setup_4.6.1.exe ]; then
 			mv ./ReShade_Setup_4.6.1.exe ./build/us_pc/ReShade_Setup_4.6.1.exe
 		fi
-		#Move texture packs
+		
+		#Move sound packs
 		if [ -d ./build/us_pc/res ]; then
-			wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
-			mv -f king_bob-omb_eyes.rgba16.png ./build/us_pc/res/actors/king_bobomb/king_bob-omb_eyes.rgba16.png
-			if [ -f Hypatia_Mario_Craft_Complete.part3.rar ]; then
-				unrar x -o+ Hypatia_Mario_Craft_Complete.part1.rar ./build/us_pc/
-            	rm Hypatia*
+			if [ -f sunshinesounds.zip ]; then
+				mv sunshinesounds.zip ./build/us_pc/res
+				rm sunshinesounds* # in case they exist from running the script before or selecting multiple times.
 			fi
 		fi
+				
+		#Move texture packs
+		pacman -S zip --noconfirm
+		if [ -d ./build/us_pc/res ]; then
+			if [ -f Hypatia_Mario_Craft_Complete.part3.rar ]; then
+				mkdir ./build/hmcc/
+				unrar x -o+ Hypatia_Mario_Craft_Complete.part1.rar ./build/hmcc/
+				mv ./build/hmcc/res ./build/hmcc/gfx
+				cd ./build/hmcc/
+				zip -r hypatiamariocraft gfx
+				mv hypatiamariocraft.zip ../../build/us_pc/res
+				cd ../../
+            	rm Hypatia_Mario_Craft_Complete.part*
+				rm -rf ./build/hmcc/
+			fi
+		fi
+		
     	echo -e "\n${GREEN}The sm64pc binary is now available in the 'build/us_pc/' folder."
 		echo -e "\n${YELLOW}If fullscreen doesn't seem like the correct resolution, then right click on the\nexe, go to properties, compatibility, then click Change high DPI settings.\nCheck the 'Override high DPI scaling behavior' checkmark, leave it on\napplication, then press apply."
 		cd ./build/us_pc/
