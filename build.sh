@@ -334,8 +334,8 @@ ${CYAN}Models Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
-(1) HD Mario
-(2) Old School HD Mario
+(1) HD Mario | ${RED}Nightly Only, Needs External Resources${CYAN}
+(2) Old School HD Mario | ${RED}Nightly Only, Needs External Resources${CYAN}
 (3) HD Bowser
 (4) 3D Coin Patch v2
 (C)ontinue
@@ -350,9 +350,9 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  rm HD_Mario_model.rar
 		  echo -e "$\n${GREEN}HD Mario Selected${RESET}\n"
             ;;
-    "2")  wget https://cdn.discordapp.com/attachments/718584345912148100/718935637184610384/Old_School_HD_Mario_Model.rar
-		  unrar x -o+ Old_School_HD_Mario_Model.rar
-		  rm Old_School_HD_Mario_Model.rar
+    "2")  wget https://cdn.discordapp.com/attachments/710283360794181633/719737291613929513/Old_School_HD_Mario_Model.zip
+		  unzip -o Old_School_HD_Mario_Model.zip
+		  rm Old_School_HD_Mario_Model.zip
 		  echo -e "$\n${GREEN}Old School HD Mario Selected${RESET}\n"
             ;;
     "3")  wget https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar
