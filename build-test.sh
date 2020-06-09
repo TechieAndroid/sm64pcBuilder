@@ -67,6 +67,8 @@ sed 's/\// /g') | cut -f1) ] && echo up to date || echo not up to date
 
 echo -e "\n"
 
+echo -e "\n Wake up sheeple \n"
+
 # Update message
 echo \
 "${YELLOW}==============================${RESET}
