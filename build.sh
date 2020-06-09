@@ -443,8 +443,8 @@ ${CYAN}Texture Packs Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
-(1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources
-(2) Mollymutt's Texture Pack | ${RED}Nightly Only, Needs External Resources${RESET}${CYAN}
+(1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}
+${CYAN}(2) Mollymutt's Texture Pack | ${RESET}${RED}Nightly Only, Needs External Resources${RESET}${CYAN}
 (C)ontinue${RESET}
 
 ${GREEN}Press C to continue${RESET}
