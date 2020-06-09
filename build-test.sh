@@ -53,6 +53,7 @@ done
 
 echo -e "\n${GREEN}Dependencies are already installed. ${RESET}\n"
 
+echo -e "\n${GREEN}RED RUM RED RUM RED RUM ${RESET}\n"
 # Delete their setup or old shit
 if [ -f $HOME/build-setup.sh ]; then
 	rm $HOME/build-setup.sh
