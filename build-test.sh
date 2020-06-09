@@ -44,12 +44,12 @@ if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 fi
 
 # Checks for some dependencies again
-#echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
-#for i in ${DEPENDENCIES[@]}; do
-	#if [[ ! $(pacman -Qe $i) ]]; then
-	#	pacman -S $i --noconfirm
-	#fi
-#done
+echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
+for i in ${DEPENDENCIES[@]}; do
+	if [[ ! $(pacman -Q $i 2> /dev/null) ]]; then
+		pacman -S $i --noconfirm
+	fi
+done
 
 echo -e "\n${GREEN}Dependencies are already installed. ${RESET}\n"
 
