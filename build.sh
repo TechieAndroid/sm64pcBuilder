@@ -45,7 +45,7 @@ fi
 # Checks for some dependencies again
 echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
 for i in ${DEPENDENCIES[@]}; do
-	if [[ ! $(pacman -Q $i) ]]; then
+	if [[ ! $(pacman -Q $i 2> /dev/null) ]]; then
 		pacman -S $i --noconfirm
 	fi
 done
