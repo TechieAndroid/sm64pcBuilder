@@ -13,8 +13,9 @@ NIGHTLY_GIT=./sm64pc-nightly/.git/
 ROM_CHECK=./baserom.us.z64
 NIGHTLY_OLD=./sm64pc-nightly.old/baserom.us.z64
 BINARY=./build/us_pc/sm64*
-FOLDER_PLACEMENT=C:/sm64pcBuilder
 MACHINE_TYPE=`uname -m`
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse @{u})
 
 # Command line options
 MASTER_OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Remove Extended Options Menu | Remove additional R button menu options" "Clean build | This deletes the build folder")
@@ -62,15 +63,16 @@ if [ -f $HOME/build.sh ]; then
 fi
 
 # Update check
-echo -e "\n${GREEN}Would you like to check for build.sh updates? ${CYAN}(y/n) ${RESET}"
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-	git stash push
+if [ $LOCAL = $REMOTE ]; then
+    echo -e "\n${GREEN}Up-to-date${RESET}\n"
+else
+    echo -e "\n${YELLOW}Downloading available build.sh update${RESET}\n"
+    git stash push
 	git stash drop
 	git pull https://github.com/gunvalk/sm64pcBuilder
-	echo -e "\n${GREEN}RESTARTING - ANSWER ${RESET}${RED}NO ${RESET}${GREEN}WHEN ASKED ABOUT UPDATES THIS TIME.${RESET}\n"
+	echo -e "\n${GREEN}Restarting...${RESET}\n"
 	sleep 2
-	exec ./build.sh $1
+	exec ./build-test.sh $1
 fi
 echo -e "\n"
 
