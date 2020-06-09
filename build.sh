@@ -96,7 +96,7 @@ read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
 echo -e "\n${GREEN}Would you like to download or update the latest source files from Github? ${CYAN}(y/n) ${RESET}"
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-	echo -e "\n${GREEN}THE MASTER HAS NOT BEEN UPDATED IN A WHILE DOWNLOAD THE NIGHTLY!${CYAN}(master/nightly) ${RESET}"
+	echo -e "\n${GREEN}THE MASTER HAS NOT BEEN UPDATED IN A WHILE DOWNLOAD THE NIGHTLY!${CYAN}(master/nightly)${RESET}"
     read answer
 	if [ "$answer" != "${answer#[Mm]}" ] ;then
 		# Checks for existence of previous .git folder, then creates one if it doesn't exist and moves the old folder
@@ -238,10 +238,10 @@ else
 
     echo -e "\n${YELLOW} Going up one directory.${RESET}\n"
 		cd ../
-fi 
-# Fix king_bobomb eyes.
-	wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
-	mv -f king_bob-omb_eyes.rgba16.png ./actors/king_bobomb/king_bob-omb_eyes.rgba16.png
+fi
+#Fix king_bobomb eyes.
+	#wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
+	#mv -f king_bob-omb_eyes.rgba16.png ./actors/king_bobomb/king_bob-omb_eyes.rgba16.png
 
 # Add-ons Menu
 while :
@@ -295,7 +295,8 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  	cd ../
 	      	git apply ./enhancements/60fps_interpolation_wip.patch --ignore-whitespace --reject
           	echo -e "$\n${GREEN}60 FPS Patch Selected${RESET}\n"
-          fi 
+          fi
+          sleep 2
             ;;
     "2")  if [[ -f "./enhancements/60fps_interpolation_wip_nocap.patch" ]]; then
 			git apply ./enhancements/60fps_interpolation_wip_nocap.patch --ignore-whitespace --reject
@@ -307,18 +308,21 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  	git apply ./enhancements/60fps_interpolation_wip_nocap.patch --ignore-whitespace --reject
 		  	echo -e "$\n${GREEN}60 FPS Patch Uncapped Framerate Selected${RESET}\n"
 		  fi
+		  sleep 2
             ;;
     "3")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
 		  echo -e "$\n${GREEN}Reshade Downloaded${RESET}\n"
+		  sleep 2
       		;;
-    "c")  break                      
+    "c")  break
             ;;
-    "C")  echo "use lower case c!!"   
-            ;; 
-     * )  echo "invalid option"     
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
             ;;
     esac
-    sleep 2
 done
 			;;
     "m")  while :
@@ -345,16 +349,19 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  unrar x -o+ HD_Mario_Model.rar
 		  rm HD_Mario_model.rar
 		  echo -e "$\n${GREEN}HD Mario Selected${RESET}\n"
+		  sleep 2
             ;;
     "2")  wget https://cdn.discordapp.com/attachments/710283360794181633/719737291613929513/Old_School_HD_Mario_Model.zip
 		  unzip -o Old_School_HD_Mario_Model.zip
 		  rm Old_School_HD_Mario_Model.zip
 		  echo -e "$\n${GREEN}Old School HD Mario Selected${RESET}\n"
+		  sleep 2
             ;;
     "3")  wget https://cdn.discordapp.com/attachments/716459185230970880/718990046442684456/hd_bowser.rar
 		  unrar x -o+ hd_bowser.rar
 		  rm hd_bowser.rar
 		  echo -e "$\n${GREEN}HD Bowser Selected${RESET}\n"
+		  sleep 2
             ;;
     "4")  if [[ -f "./enhancements/3d_coin_v2.patch" ]]; then
 			git apply ./enhancements/3d_coin_v2.patch  --ignore-whitespace --reject
@@ -365,36 +372,42 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  	cd ../
 	      	git apply ./enhancements/3d_coin_v2.patch --ignore-whitespace --reject
           	echo -e "$\n${GREEN}3D Coin Patch v2 Selected${RESET}\n"
-          fi 
+          fi
+          sleep 2
             ;;
     #"5")  wget https://cdn.discordapp.com/attachments/716459185230970880/718994292311326730/Hi_Poly_MIPS.rar
 		  #unrar x -o+ Hi_Poly_MIPS.rar
 		  #rm Hi_Poly_MIPS.rar
 		  #echo -e "$\n${GREEN}Hi-Poly MIPS Selected${RESET}\n"
+		  #sleep 2
             #;;
     #"6")  wget https://cdn.discordapp.com/attachments/716459185230970880/718999316194263060/Mario_Party_Whomp.rar
 		  #unrar x -o+ Mario_Party_Whomp.rar
 		  #rm Mario_Party_Whomp.rar
 		  #echo -e "$\n${GREEN}Mario Party Whomp Selected${RESET}\n"
+		  #sleep 2
             #;;
     #"7")  wget https://cdn.discordapp.com/attachments/716459185230970880/719001278184685598/Mario_Party_Piranha_Plant.rar
 		  #unrar x -o+ Mario_Party_Piranha_Plant.rar
 		  #rm Mario_Party_Piranha_Plant.rar
 		  #echo -e "$\n${GREEN}Mario Party Piranha Plant Selected${RESET}\n"
+		  #sleep 2
             #;;
     #"8")  wget https://cdn.discordapp.com/attachments/716459185230970880/719004227464331394/Hi_Poly_Penguin_1.4.rar
 		  #unrar x -o+ Hi_Poly_Penguin_1.4.rar
 		  #rm Hi_Poly_Penguin_1.4.rar
 		  #echo -e "$\n${GREEN}Hi-Poly Penguin 1.4 Selected${RESET}\n"
+		  #sleep 2
             #;;
-    "c")  break                      
+    "c")  break
             ;;
-    "C")  echo "use lower case c!!"   
-            ;; 
-     * )  echo "invalid option"     
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
             ;;
     esac
-    sleep 2
 done
 			;;
     "s")  while :
@@ -419,15 +432,17 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  #rm Sunshine_Mario_VO.rar
 		  wget https://cdn.discordapp.com/attachments/718584345912148100/719492399411232859/sunshinesounds.zip
 		  echo -e "$\n${GREEN}Super Mario Sunshine Mario Voice Selected${RESET}\n"
+		  sleep 2
             ;;
-    "c")  break                      
+    "c")  break
             ;;
-    "C")  echo "use lower case c!!"   
-            ;; 
-     * )  echo "invalid option"     
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
             ;;
     esac
-    sleep 2
 done
 			;;
     "t")  while :
@@ -456,6 +471,7 @@ ${RESET}${YELLOW}------------------------------${RESET}"
           else
           	echo -e "$\n${GREEN}Hypatia´s Mario Craft 64 Selected${RESET}\n"
           fi
+          sleep 2
             ;;
 	"2")  wget https://cdn.discordapp.com/attachments/718584345912148100/719639977662611466/mollymutt.zip
           if [ ! -f mollymutt.zip ]; then
@@ -463,15 +479,17 @@ ${RESET}${YELLOW}------------------------------${RESET}"
           else
           	echo -e "$\n${GREEN}Mollymutt's Texture Pack Selected${RESET}\n"
           fi
+          sleep 2
             ;;
-    "c")  break                      
+    "c")  break
             ;;
-    "C")  echo "use lower case c!!"   
-            ;; 
-     * )  echo "invalid option"     
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
             ;;
     esac
-    sleep 2
 done
 			;;
     "v")  while :
@@ -497,15 +515,17 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  	mv sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.bin
 		  fi
 		  echo -e "$\n${GREEN}120 Star Save Selected${RESET}\n"
+		  sleep 2
             ;;
-    "c")  break                      
+    "c")  break
             ;;
-    "C")  echo "use lower case c!!"   
-            ;; 
-     * )  echo "invalid option"     
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
             ;;
     esac
-    sleep 2
 done
 			;;
     "u")  while :
@@ -530,36 +550,41 @@ ${RESET}${YELLOW}------------------------------${RESET}"
     "1")  if [[ -f "./enhancements/60fps_interpolation_wip.patch" ]]; then
 			git apply -R ./enhancements/60fps_interpolation_wip.patch  --ignore-whitespace --reject
 			echo -e "$\n${GREEN}60 FPS Patch Removed${RESET}\n"
-          fi 
+          fi
+          sleep 2
             ;;
     "2")  if [[ -f "./enhancements/60fps_interpolation_wip_nocap.patch" ]]; then
 			git apply -R ./enhancements/60fps_interpolation_wip_nocap.patch --ignore-whitespace --reject
 			echo -e "$\n${GREEN}60 FPS Patch Uncapped Framerate Removed${RESET}\n"
 		  fi
+		  sleep 2
             ;;
     "3")  if [[ -f "./enhancements/3d_coin_v2.patch" ]]; then
 			git apply -R ./enhancements/3d_coin_v2.patch  --ignore-whitespace --reject
 			echo -e "$\n${GREEN}3D Coin Patch v2 Removed${RESET}\n"
 		  fi
+		  sleep 2
 		    ;;
-    "c")  break                      
+    "c")  break
             ;;
-    "C")  echo "use lower case c!!"   
-            ;; 
-     * )  echo "invalid option"     
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
             ;;
     esac
-    sleep 2
 done
 			;;
-    "c")  break                      
+    "c")  break
             ;;
-    "C")  echo "use lower case c!!"   
-            ;; 
-     * )  echo "invalid option"     
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
             ;;
     esac
-    sleep 2
 done
 
 # Master flags menu
