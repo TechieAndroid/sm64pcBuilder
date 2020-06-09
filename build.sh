@@ -72,7 +72,7 @@ else
 	git pull https://github.com/gunvalk/sm64pcBuilder test
 	echo -e "\n${GREEN}Restarting...${RESET}\n"
 	sleep 2
-	exec ./build-test.sh $1
+	exec ./build.sh $1
 fi
 echo -e "\n"
 
