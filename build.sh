@@ -22,6 +22,9 @@ MASTER_EXTRA=("BETTERCAMERA=1" "NODRAWINGDISTANCE=1" "TEXTURE_FIX=1" "EXT_OPTION
 NIGHTLY_OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Allow External Resources" "Remove Extended Options Menu | Remove additional R button menu options" "OpenGL 1.3 Renderer | Unrecommended. Only use if your machine is very old" "Clean build | This deletes the build folder")
 NIGHTLY_EXTRA=("BETTERCAMERA=1" "NODRAWINGDISTANCE=1" "TEXTURE_FIX=1" "EXTERNAL_DATA=1" "EXT_OPTIONS_MENU=0" "LEGACY_GL=1" "clean")
 
+# Extra dependency checks
+DEPENDENCIES=("make" "git" "zip" "curl" "unrar" "mingw-w64-i686-gcc" "mingw-w64-x86_64-gcc" "mingw-w64-i686-glew" "mingw-w64-x86_64-glew" "mingw-w64-i686-SDL2" "mingw-w64-x86_64-SDL2")
+
 # Colors
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
@@ -29,28 +32,27 @@ YELLOW=$(tput setaf 3)
 CYAN=$(tput setaf 6)
 RESET=$(tput sgr0)
 
-# Checks for common required executables (make, git, gcc) and installs them if they are missing
+# Checks for common required executables (make, git) and installs everything if they are missing
 if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 	echo -e "\n${RED}Dependencies are missing. Proceeding with the installation... ${RESET}\n" >&2
 	pacman -Sy --needed base-devel mingw-w64-i686-toolchain mingw-w64-x86_64-toolchain \
                     git subversion mercurial \
                     mingw-w64-i686-cmake mingw-w64-x86_64-cmake --noconfirm
-    pacman -S mingw-w64-i686-glew mingw-w64-x86_64-glew mingw-w64-i686-SDL2 mingw-w64-x86_64-SDL2 mingw-w64-i686-python-xdg mingw-w64-x86_64-python-xdg python3 --noconfirm
+    pacman -S mingw-w64-i686-glew mingw-w64-x86_64-glew mingw-w64-i686-SDL2 mingw-w64-x86_64-SDL2 mingw-w64-i686-python-xdg mingw-w64-x86_64-python-xdg python3 zip curl --noconfirm
 	pacman -Syuu --noconfirm
-else
-	echo -e "\n${GREEN}Dependencies are already installed. ${RESET}\n"
 fi
 
-#Upgrade to updating version
-if [ ! -d "$FOLDER_PLACEMENT" ]; then
-	git clone https://github.com/gunvalk/sm64pcBuilder/
-	mv ./sm64pcBuilder c:/sm64pcBuilder
-	cd c:/sm64pcBuilder
-	echo -e "\n${GREEN}RESTARTING\n"
-	exec ./build.sh $1
-fi
+# Checks for some dependencies again
+echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
+for i in ${DEPENDENCIES[@]}; do
+	if [[ ! $(pacman -Qe $i) ]]; then
+		pacman -S $i --noconfirm
+	fi
+done
 
-#Delete their setup or old shit
+echo -e "\n${GREEN}Dependencies are already installed. ${RESET}\n"
+
+# Delete their setup or old shit
 if [ -f $HOME/build-setup.sh ]; then
 	rm $HOME/build-setup.sh
 fi
@@ -59,7 +61,7 @@ if [ -f $HOME/build.sh ]; then
 	rm $HOME/build.sh
 fi
 
-#Update check
+# Update check
 echo -e "\n${GREEN}Would you like to check for build.sh updates? ${CYAN}(y/n) ${RESET}"
 read answer
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -72,7 +74,7 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
 fi
 echo -e "\n"
 
-#Update message
+# Update message
 echo \
 "${YELLOW}==============================${RESET}
 ${CYAN}SM64PC Builder${RESET}
@@ -84,11 +86,13 @@ ${CYAN}-Patch Menu -> Add-ons Menu
 -New Models (Old School HD Mario,
  HD Bowser, 3D Coin Patch v2)
 -32bit Compiling Fixed
--New external data format w/ zips,
+-New external Data Format w/ Zips,
  Thanks Derailius
+-Added Mollymutt's Texture Pack
+-New Dependency Checks
 
 ${RESET}${YELLOW}------------------------------${RESET}
-${CYAN}build.sh Update 18.5${RESET}
+${CYAN}build.sh Update 18.6${RESET}
 ${YELLOW}==============================${RESET}"
 
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
@@ -228,7 +232,7 @@ else
 
 	sed -i 's/tabledesign_CFLAGS := -Wno-uninitialized -laudiofile/tabledesign_CFLAGS := -Wno-uninitialized -laudiofile -lstdc++/g' Makefile
 
-	#Checks the computer architecture
+	# Checks the computer architecture
 	echo -e "${YELLOW} Executing: ${CYAN}make $1${RESET}\n\n"
 
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
@@ -240,11 +244,11 @@ else
     echo -e "\n${YELLOW} Going up one directory.${RESET}\n"
 		cd ../
 fi 
-#Fix king_bobomb eyes.
+# Fix king_bobomb eyes.
 	wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
 	mv -f king_bob-omb_eyes.rgba16.png ./actors/king_bobomb/king_bob-omb_eyes.rgba16.png
 
-#Add-ons Menu
+# Add-ons Menu
 while :
 do
     clear
@@ -440,8 +444,9 @@ ${CYAN}Texture Packs Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
-(1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}
-${CYAN}(C)ontinue
+(1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources
+(2) Mollymutt's Texture Pack | ${RED}Nightly Only, Needs External Resources
+(C)ontinue${RESET}
 
 ${GREEN}Press C to continue${RESET}
 ${RESET}${YELLOW}------------------------------${RESET}"
@@ -455,6 +460,13 @@ ${RESET}${YELLOW}------------------------------${RESET}"
           	echo -e "${RED}Your download fucked up"
           else
           	echo -e "$\n${GREEN}Hypatia´s Mario Craft 64 Selected${RESET}\n"
+          fi
+            ;;
+	"2")  wget https://cdn.discordapp.com/attachments/718584345912148100/719639977662611466/mollymutt.zip
+          if [ ! -f mollymutt.zip ]; then
+          	echo -e "${RED}Your download fucked up"
+          else
+          	echo -e "$\n${GREEN}Mollymutt's Texture Pack Selected${RESET}\n"
           fi
             ;;
     "c")  break                      
@@ -555,7 +567,7 @@ done
     sleep 2
 done
 
-#Master flags menu
+# Master flags menu
 if [ "$I_Want_Master" = true ]; then 
 	menu() {
 			printf "\nAvaliable options:\n"
@@ -583,7 +595,7 @@ if [ "$I_Want_Master" = true ]; then
 	done
 fi
 
-#Master flags menu
+# Nightly flags menu
 if [ "$I_Want_Nightly" = true ]; then 
 	menu() {
 			printf "\nAvaliable options:\n"
@@ -611,7 +623,7 @@ if [ "$I_Want_Nightly" = true ]; then
 	done
 fi
 
-#Checks the computer architecture
+# Checks the computer architecture
 if [ "${CMDL}" != " clean" ]; then
 	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
 
@@ -626,7 +638,7 @@ if [ "${CMDL}" != " clean" ]; then
 			mv ./ReShade_Setup_4.6.1.exe ./build/us_pc/ReShade_Setup_4.6.1.exe
 		fi
 		
-		#Move sound packs
+		# Move sound packs
 		if [ -d ./build/us_pc/res ]; then
 			if [ -f sunshinesounds.zip ]; then
 				mv sunshinesounds.zip ./build/us_pc/res
@@ -634,7 +646,7 @@ if [ "${CMDL}" != " clean" ]; then
 			fi
 		fi
 				
-		#Move texture packs
+		# Move texture packs
 		pacman -S zip --noconfirm
 		if [ -d ./build/us_pc/res ]; then
 			if [ -f Hypatia_Mario_Craft_Complete.part3.rar ]; then
@@ -647,6 +659,9 @@ if [ "${CMDL}" != " clean" ]; then
 				cd ../../
             	rm Hypatia_Mario_Craft_Complete.part*
 				rm -rf ./build/hmcc/
+			fi
+			if [ -f mollymutt.zip ]; then
+				mv mollymutt.zip ./build/us_pc/res
 			fi
 		fi
 		
