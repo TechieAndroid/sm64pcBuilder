@@ -335,7 +335,7 @@ ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
 (1) HD Mario | ${RED}Nightly Only, Needs External Resources${CYAN}
-(2) Old School HD Mario | ${RED}Nightly Only, Needs External Resources${CYAN}
+(2) Old School HD Mario
 (3) HD Bowser
 (4) 3D Coin Patch v2
 (C)ontinue
