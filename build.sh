@@ -43,12 +43,12 @@ if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 fi
 
 # Checks for some dependencies again
-echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
-for i in ${DEPENDENCIES[@]}; do
-	if [[ ! $(pacman -Qe $i) ]]; then
-		pacman -S $i --noconfirm
-	fi
-done
+#echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
+#for i in ${DEPENDENCIES[@]}; do
+	#if [[ ! $(pacman -Qe $i) ]]; then
+	#	pacman -S $i --noconfirm
+	#fi
+#done
 
 echo -e "\n${GREEN}Dependencies are already installed. ${RESET}\n"
 
@@ -89,7 +89,6 @@ ${CYAN}-Patch Menu -> Add-ons Menu
 -New external Data Format w/ Zips,
  Thanks Derailius
 -Added Mollymutt's Texture Pack
--New Dependency Checks
 
 ${RESET}${YELLOW}------------------------------${RESET}
 ${CYAN}build.sh Update 18.6${RESET}
