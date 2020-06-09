@@ -75,8 +75,6 @@ pull_function () {
 [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
 sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh is up to date\n${RESET}" || pull_function
 
-echo -e "\n"
-
 # Update message
 echo \
 "${YELLOW}==============================${RESET}
