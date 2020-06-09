@@ -51,7 +51,7 @@ for i in ${DEPENDENCIES[@]}; do
 	fi
 done
 
-echo -e "\n${GREEN}Dependencies are already installed. ${RESET}\n"
+echo -e "\n${GREEN}Dependencies are installed. ${RESET}\n"
 
 # Delete their setup or old shit
 if [ -f $HOME/build-setup.sh ]; then
