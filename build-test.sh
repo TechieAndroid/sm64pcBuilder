@@ -61,9 +61,18 @@ if [ -f $HOME/build.sh ]; then
 fi
 
 # Update check
+pull_function () {
+	echo -e "\n${YELLOW}Downloading available build.sh updates...${RESET}\n"
+	git stash push
+	git stash drop
+	git pull https://github.com/gunvalk/sm64pcBuilder
+	echo -e "\n${GREEN}Restarting...${RESET}\n"
+	sleep 2
+	exec ./build.sh $1
+}
 
 [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-sed 's/\// /g') | cut -f1) ] && echo -e "${GREEN}build.sh up to date" || echo not up to date
+sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh up to date\n" || pull_function
 
 echo -e "\n"
 
