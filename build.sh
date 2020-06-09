@@ -83,13 +83,7 @@ ${CYAN}SM64PC Builder${RESET}
 ${YELLOW}------------------------------${RESET}
 ${GREEN}Updates:${RESET}
 
-${CYAN}-Patch Menu -> Add-ons Menu
--Submenus
--New Models (Old School HD Mario,
- HD Bowser, 3D Coin Patch v2)
--32bit Compiling Fixed
--New external Data Format w/ Zips,
- Thanks Derailius
+${CYAN}-New external Data Format w/ Zips,
 -Added Mollymutt's Texture Pack
 -Auto Updater
 
