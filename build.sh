@@ -63,17 +63,27 @@ if [ -f $HOME/build.sh ]; then
 fi
 
 # Update check
-if [ "$PULL" = "Already up to date." ]; then
-	echo -e "\n${GREEN}build.sh is up to date\n${RESET}"
-else
-	echo -e "\n${YELLOW}Updating build.sh\n${RESET}"
+echo -e "\n${GREEN}Would you like to check for build.sh updates? ${CYAN}(y/n) ${RESET}"
+read answer
+if [ "$answer" != "${answer#[Yy]}" ] ;then
 	git stash push
 	git stash drop
 	git pull https://github.com/gunvalk/sm64pcBuilder
-	echo -e "\n${GREEN}Restarting...${RESET}\n"
+	echo -e "\n${GREEN}RESTARTING - ANSWER ${RESET}${RED}NO ${RESET}${GREEN}WHEN ASKED ABOUT UPDATES THIS TIME.${RESET}\n"
 	sleep 2
 	exec ./build.sh $1
 fi
+#if [ "$PULL" = "Already up to date." ]; then
+	#echo -e "\n${GREEN}build.sh is up to date\n${RESET}"
+#else
+	#echo -e "\n${YELLOW}Updating build.sh\n${RESET}"
+	#git stash push
+	#git stash drop
+	#git pull https://github.com/gunvalk/sm64pcBuilder
+	#echo -e "\n${GREEN}Restarting...${RESET}\n"
+	#sleep 2
+	#exec ./build.sh $1
+#fi
 echo -e "\n"
 
 # Update message
@@ -85,7 +95,8 @@ ${GREEN}Updates:${RESET}
 
 ${CYAN}-New external Data Format w/ Zips,
 -Added Mollymutt's Texture Pack
--Auto Updater
+-Reverted Auto Updater Due To
+ Looping On Non-English Windows Versions
 
 ${RESET}${YELLOW}------------------------------${RESET}
 ${CYAN}build.sh Update 19${RESET}
