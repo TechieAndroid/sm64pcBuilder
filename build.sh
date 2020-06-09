@@ -15,7 +15,7 @@ NIGHTLY_OLD=./sm64pc-nightly.old/baserom.us.z64
 BINARY=./build/us_pc/sm64*
 FOLDER_PLACEMENT=C:/sm64pcBuilder
 MACHINE_TYPE=`uname -m`
-PULL=$(git pull https://github.com/gunvalk/sm64pcBuilder 2> /dev/null)
+#PULL=$(git pull https://github.com/gunvalk/sm64pcBuilder 2> /dev/null)
 
 # Command line options
 MASTER_OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Remove Extended Options Menu | Remove additional R button menu options" "Clean build | This deletes the build folder")
