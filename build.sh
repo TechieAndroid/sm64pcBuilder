@@ -15,7 +15,6 @@ NIGHTLY_OLD=./sm64pc-nightly.old/baserom.us.z64
 BINARY=./build/us_pc/sm64*
 FOLDER_PLACEMENT=C:/sm64pcBuilder
 MACHINE_TYPE=`uname -m`
-#PULL=$(git pull https://github.com/gunvalk/sm64pcBuilder 2> /dev/null)
 
 # Command line options
 MASTER_OPTIONS=("Analog Camera" "No Draw Distance" "Texture Fixes" "Remove Extended Options Menu | Remove additional R button menu options" "Clean build | This deletes the build folder")
@@ -63,27 +62,19 @@ if [ -f $HOME/build.sh ]; then
 fi
 
 # Update check
-echo -e "\n${GREEN}Would you like to check for build.sh updates? ${CYAN}(y/n) ${RESET}"
-read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
+pull_function () {
+	echo -e "\n${YELLOW}Downloading available build.sh updates...${RESET}\n"
 	git stash push
 	git stash drop
 	git pull https://github.com/gunvalk/sm64pcBuilder
-	echo -e "\n${GREEN}RESTARTING - ANSWER ${RESET}${RED}NO ${RESET}${GREEN}WHEN ASKED ABOUT UPDATES THIS TIME.${RESET}\n"
+	echo -e "\n${GREEN}Restarting...${RESET}\n"
 	sleep 2
 	exec ./build.sh $1
-fi
-#if [ "$PULL" = "Already up to date." ]; then
-	#echo -e "\n${GREEN}build.sh is up to date\n${RESET}"
-#else
-	#echo -e "\n${YELLOW}Updating build.sh\n${RESET}"
-	#git stash push
-	#git stash drop
-	#git pull https://github.com/gunvalk/sm64pcBuilder
-	#echo -e "\n${GREEN}Restarting...${RESET}\n"
-	#sleep 2
-	#exec ./build.sh $1
-#fi
+}
+
+[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
+sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh is up to date\n${RESET}" || pull_function
+
 echo -e "\n"
 
 # Update message
@@ -95,8 +86,7 @@ ${GREEN}Updates:${RESET}
 
 ${CYAN}-New external Data Format w/ Zips,
 -Added Mollymutt's Texture Pack
--Reverted Auto Updater Due To
- Looping On Non-English Windows Versions
+-New Auto Updater
 
 ${RESET}${YELLOW}------------------------------${RESET}
 ${CYAN}build.sh Update 19${RESET}
