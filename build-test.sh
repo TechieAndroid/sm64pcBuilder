@@ -63,18 +63,7 @@ if [ -f $HOME/build.sh ]; then
 fi
 
 # Update check
-if [ $LOCAL = $REMOTE ]; then
-    echo -e "\n${GREEN}Up-to-date${RESET}\n"
-else
-    echo -e "\n${YELLOW}Downloading available build.sh update${RESET}\n"
-    git stash push
-	git stash drop
-	git pull https://github.com/gunvalk/sm64pcBuilder test
-	echo -e "\n${GREEN}Restarting...${RESET}\n"
-	sleep 2
-	exec ./build.sh $1
-fi
-echo -e "\n"
+e "\n"
 
 # Update message
 echo \
