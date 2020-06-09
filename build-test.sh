@@ -76,8 +76,6 @@ sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh up to date\n" || pul
 
 echo -e "\n"
 
-echo -e "\n Wake up sheeple \n"
-
 # Update message
 echo \
 "${YELLOW}==============================${RESET}
