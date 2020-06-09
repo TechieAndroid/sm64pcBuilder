@@ -646,7 +646,6 @@ if [ "${CMDL}" != " clean" ]; then
 		fi
 				
 		# Move texture packs
-		pacman -S zip --noconfirm
 		if [ -d ./build/us_pc/res ]; then
 			if [ -f Hypatia_Mario_Craft_Complete.part3.rar ]; then
 				mkdir ./build/hmcc/
