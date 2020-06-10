@@ -86,9 +86,10 @@ ${CYAN}-New external Data Format w/ Zips,
 -Added Mollymutt's Texture Pack
 -New Auto Updater
 -Added Discord, JP, And EU Options
+-Master/Nightly Updates Automatically
 
 ${RESET}${YELLOW}------------------------------${RESET}
-${CYAN}build.sh Update 19.1${RESET}
+${CYAN}build.sh Update 19.2${RESET}
 ${YELLOW}==============================${RESET}"
 
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
