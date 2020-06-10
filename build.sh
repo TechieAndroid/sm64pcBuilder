@@ -61,8 +61,8 @@ if [ -f $HOME/build.sh ]; then
 	rm $HOME/build.sh
 fi
 
-# Update check
-pull_function () {
+# Update sm64pcbuilder check
+pull_sm64pcbuilder () {
 	echo -e "\n${YELLOW}Downloading available build.sh updates...${RESET}\n"
 	git stash push
 	git stash drop
@@ -73,7 +73,7 @@ pull_function () {
 }
 
 [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh is up to date\n${RESET}" || pull_function
+sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh is up to date\n${RESET}" || pull_sm64pcbuilder
 
 # Update message
 echo \
@@ -94,67 +94,75 @@ ${YELLOW}==============================${RESET}"
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
 
 # Gives options to download from the Github
-echo -e "\n${GREEN}Would you like to download or update the latest source files from Github? ${CYAN}(y/n) ${RESET}"
+
+# Update master check
+pull_master () {
+	echo -e "\n${YELLOW}Downloading available sm64pc-master updates...${RESET}\n"
+	git stash push
+	git stash drop
+	git pull
+	sleep 2
+}
+
+# Update nightly check
+pull_nightly () {
+	echo -e "\n${YELLOW}Downloading available sm64pc-nightly updates...${RESET}\n"
+	git stash push
+	git stash drop
+	git pull
+	sleep 2
+}
+
+echo -e "\n${GREEN}Are you building master or nightly? ${CYAN}(master/nightly)${RESET}"
 read answer
-if [ "$answer" != "${answer#[Yy]}" ] ;then
-	echo -e "\n${GREEN}THE MASTER HAS NOT BEEN UPDATED IN A WHILE DOWNLOAD THE NIGHTLY!${CYAN}(master/nightly)${RESET}"
-    read answer
-	if [ "$answer" != "${answer#[Mm]}" ] ;then
-		# Checks for existence of previous .git folder, then creates one if it doesn't exist and moves the old folder
-		if [ -d "$MASTER_GIT" ]; then
-			cd ./sm64pc-master
-			echo -e "\n"
-			git stash push
-			git stash drop
-			git pull https://github.com/sm64pc/sm64pc
-			I_Want_Master=true
-			cd ../
-		else
-			if [ -d "$MASTER" ]; then
-				mv sm64pc-master sm64pc-master.old
-			fi
-			echo -e "\n"
-			git clone git://github.com/sm64pc/sm64pc sm64pc-master
-			I_Want_Master=true
+if [ "$answer" != "${answer#[Mm]}" ] ;then
+	# Checks for existence of previous .git folder, then creates one if it doesn't exist and moves the old folder
+	if [ -d "$MASTER_GIT" ]; then
+		cd ./sm64pc-master
+		echo -e "\n"
+		[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
+		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-master is up to date\n${RESET}" || pull_master
+		if [ -f ./build.sh ]; then
+			rm ./build.sh
 		fi
+		I_Want_Master=true
+		cd ../
 	else
-		if [ -d "$NIGHTLY_GIT" ]; then
-			cd ./sm64pc-nightly
-			echo -e "\n"
-			git stash push
-			git stash drop
-			git pull https://github.com/sm64pc/sm64pc
-			if [ -f ./build.sh ]; then
-				rm ./build.sh
-			fi
-			I_Want_Nightly=true
-			cd ../
-		else
-			if [ -d "$NIGHTLY" ]; then
-				echo -e "\n"
-				mv sm64pc-nightly sm64pc-nightly.old
-				git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
-				if [ -f ./sm64pc-nightly/build.sh ]; then
-					rm ./sm64pc-nightly/build.sh
-				fi
-				I_Want_Nightly=true
-			else
-				echo -e "\n"
-				git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
-				if [ -f ./sm64pc-nightly/build.sh ]; then
-					rm ./sm64pc-nightly/build.sh
-				fi
-				I_Want_Nightly=true
-			fi
+		if [ -d "$MASTER" ]; then
+			mv sm64pc-master sm64pc-master.old
 		fi
+		echo -e "\n"
+		git clone git://github.com/sm64pc/sm64pc sm64pc-master
+		I_Want_Master=true
 	fi
 else
-    echo -e "\n${GREEN}Are you building master or nightly? (master/nightly) ${RESET}"
-	read answer
-	if [ "$answer" != "${answer#[Mm]}" ] ;then
-		I_Want_Master=true
-	else
+	if [ -d "$NIGHTLY_GIT" ]; then
+		cd ./sm64pc-nightly
+		echo -e "\n"
+		[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
+		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-nightly is up to date\n${RESET}" || pull_nightly
+		if [ -f ./build.sh ]; then
+			rm ./build.sh
+		fi
 		I_Want_Nightly=true
+		cd ../
+	else
+		if [ -d "$NIGHTLY" ]; then
+			echo -e "\n"
+			mv sm64pc-nightly sm64pc-nightly.old
+			git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+			if [ -f ./sm64pc-nightly/build.sh ]; then
+				rm ./sm64pc-nightly/build.sh
+			fi
+			I_Want_Nightly=true
+		else
+			echo -e "\n"
+			git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+			if [ -f ./sm64pc-nightly/build.sh ]; then
+				rm ./sm64pc-nightly/build.sh
+			fi
+			I_Want_Nightly=true
+		fi
 	fi
 fi
 
@@ -659,7 +667,7 @@ fi
 
 # Checks the computer architecture
 if [ "${CMDL}" != " clean" ]; then
-	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
+	echo -e "\n${YELLOW} Executing: ${CYAN}make${CMDL} $1${RESET}\n\n"
 
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 	  PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
@@ -708,7 +716,7 @@ if [ "${CMDL}" != " clean" ]; then
 
 else
 
-	echo -e "\n${YELLOW} Executing: ${CYAN}make ${CMDL} $1${RESET}\n\n"
+	echo -e "\n${YELLOW} Executing: ${CYAN}make${CMDL} $1${RESET}\n\n"
 
 	if [ ${MACHINE_TYPE} == 'x86_64' ]; then
 	  PATH=/mingw64/bin:/mingw32/bin:$PATH make $CMDL $1
