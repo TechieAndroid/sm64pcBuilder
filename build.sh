@@ -618,6 +618,8 @@ if [ "$I_Want_Master" = true ]; then
 			printf "${YELLOW}Please do not select \"Clean build\" with any other option.\n"
 			printf "${RED}WARNING: Backup your save file before selecting \"Clean build\".\n"
 			printf "${CYAN}Press the corresponding number and press enter to select it.\nWhen all desired options are selected, press Enter to continue.\n"
+			printf "${RED}RUN \"Clean build\" REGULARLY.\n"
+			printf "Everytime you want to update to a newer version or build with different options\nyou have to choose the option \"Clean build\" or manually remove or rename\nsm64pc-master/build or sm64pc-nightly/build\n"
 			printf "${YELLOW}Check Remove Extended Options Menu & leave other options unchecked for a Vanilla\nbuild.\n${RESET}"
 	}
 
@@ -646,6 +648,8 @@ if [ "$I_Want_Nightly" = true ]; then
 			printf "${YELLOW}Please do not select \"Clean build\" with any other option.\n"
 			printf "${RED}WARNING: Backup your save file before selecting \"Clean build\".\n"
 			printf "${CYAN}Press the corresponding number and press enter to select it.\nWhen all desired options are selected, press Enter to continue.\n"
+			printf "${RED}RUN \"Clean build\" REGULARLY.\n"
+			printf "Everytime you want to update to a newer version or build with different options\nyou have to choose the option \"Clean build\" or manually remove or rename\nsm64pc-master/build or sm64pc-nightly/build\n"
 			printf "${YELLOW}Check Remove Extended Options Menu & leave other options unchecked for a Vanilla\nbuild.\n${RESET}"
 	}
 
