@@ -279,7 +279,7 @@ ${CYAN}Press a number to select:
 
 (1) 60 FPS Patch (WIP)
 (2) 60 FPS Patch Uncapped Framerate (WIP)
-(3) Dont Exit From Star Patch | Cheat Menu
+(3) Dont Exit From Star Patch
 (4) Download Reshade - Post processing effects
 (C)ontinue
 
@@ -312,15 +312,15 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  fi
 		  sleep 2
             ;;
-    "3")  if [[ -f "./enhancements/DontExitFromStar_CheatMenu.patch" ]]; then
-			git apply ./enhancements/DontExitFromStar_CheatMenu.patch --ignore-whitespace --reject
-			echo -e "$\n${GREEN}Dont Exit From Star Patch | Cheat Menu Selected${RESET}\n"
+    "3")  if [[ -f "./enhancements/DontExitFromStar.patch" ]]; then
+			git apply ./enhancements/DontExitFromStar.patch --ignore-whitespace --reject
+			echo -e "$\n${GREEN}Dont Exit From Star Patch Selected${RESET}\n"
 		  else
 		  	cd ./enhancements
-		  	wget https://cdn.discordapp.com/attachments/718584345912148100/720282188762972191/DontExitFromStar_CheatMenu.patch
+		  	wget https://cdn.discordapp.com/attachments/718584345912148100/720292073798107156/DontExitFromStar.patch
 		  	cd ../
-		  	git apply ./enhancements/DontExitFromStar_CheatMenu.patch --ignore-whitespace --reject
-		  	echo -e "$\n${GREEN}Dont Exit From Star Patch | Cheat Menu Selected${RESET}\n"
+		  	git apply ./enhancements/DontExitFromStar.patch --ignore-whitespace --reject
+		  	echo -e "$\n${GREEN}Dont Exit From Star Patch Selected${RESET}\n"
 		  fi
 		  sleep 2
             ;;
