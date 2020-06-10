@@ -279,7 +279,8 @@ ${CYAN}Press a number to select:
 
 (1) 60 FPS Patch (WIP)
 (2) 60 FPS Patch Uncapped Framerate (WIP)
-(3) Download Reshade - Post processing effects
+(3) Dont Exit From Star Patch | Cheat Menu
+(4) Download Reshade - Post processing effects
 (C)ontinue
 
 ${GREEN}Press C to continue${RESET}
@@ -311,7 +312,19 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  fi
 		  sleep 2
             ;;
-    "3")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
+    "3")  if [[ -f "./enhancements/DontExitFromStar_CheatMenu.patch" ]]; then
+			git apply ./enhancements/DontExitFromStar_CheatMenu.patch --ignore-whitespace --reject
+			echo -e "$\n${GREEN}Dont Exit From Star Patch | Cheat Menu Selected${RESET}\n"
+		  else
+		  	cd ./enhancements
+		  	wget https://cdn.discordapp.com/attachments/718584345912148100/720282188762972191/DontExitFromStar_CheatMenu.patch
+		  	cd ../
+		  	git apply ./enhancements/DontExitFromStar_CheatMenu.patch --ignore-whitespace --reject
+		  	echo -e "$\n${GREEN}Dont Exit From Star Patch | Cheat Menu Selected${RESET}\n"
+		  fi
+		  sleep 2
+            ;;
+    "4")  wget https://reshade.me/downloads/ReShade_Setup_4.6.1.exe
 		  echo -e "$\n${GREEN}Reshade Downloaded${RESET}\n"
 		  sleep 2
       		;;
