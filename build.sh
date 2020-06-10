@@ -249,9 +249,6 @@ else
     echo -e "\n${YELLOW} Going up one directory.${RESET}\n"
 		cd ../
 fi
-#Fix king_bobomb eyes.
-	#wget https://cdn.discordapp.com/attachments/710283360794181633/718232903066189884/king_bob-omb_eyes.rgba16.png
-	#mv -f king_bob-omb_eyes.rgba16.png ./actors/king_bobomb/king_bob-omb_eyes.rgba16.png
 
 # Add-ons Menu
 while :
