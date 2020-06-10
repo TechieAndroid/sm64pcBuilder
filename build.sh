@@ -253,13 +253,13 @@ ${CYAN}Add-ons Menu${RESET}
 ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a letter to select:
 
-(E)nhancements
+(C)ontinue
+(U)ninstall Patches
 (M)odels
+(V)arious
+(E)nhancements
 (S)ound Packs
 (T)exture Packs
-(V)arious
-(U)ninstall Patches
-(C)ontinue
 
 ${GREEN}Press C without making a selection to
 continue with no patches.${RESET}
