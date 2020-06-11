@@ -87,15 +87,15 @@ ${CYAN}SM64PC Builder${RESET}
 ${YELLOW}------------------------------${RESET}
 ${GREEN}Updates:${RESET}
 
-${CYAN}-Added Mollymutt's Texture Pack
--New Auto Updater
--Added Discord, JP, And EU Options
+${CYAN}-Added Discord, JP, And EU Options
 -Master/Nightly Updates Automatically
 -Use noupdate After ./build.sh Or -j
  To Skip Updating Master Or Nightly
+-New DX11 & DX12 Renderer Options
+-Avast Warning
 
 ${RESET}${YELLOW}------------------------------${RESET}
-${CYAN}build.sh Update 19.3${RESET}
+${CYAN}build.sh Update 19.4${RESET}
 ${YELLOW}==============================${RESET}"
 
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
