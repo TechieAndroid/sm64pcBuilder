@@ -82,14 +82,15 @@ ${CYAN}SM64PC Builder${RESET}
 ${YELLOW}------------------------------${RESET}
 ${GREEN}Updates:${RESET}
 
-${CYAN}-New external Data Format w/ Zips,
--Added Mollymutt's Texture Pack
+${CYAN}-Added Mollymutt's Texture Pack
 -New Auto Updater
 -Added Discord, JP, And EU Options
 -Master/Nightly Updates Automatically
+-Use noupdate After ./build.sh Or -j
+ To Skip Updating Master Or Nightly
 
 ${RESET}${YELLOW}------------------------------${RESET}
-${CYAN}build.sh Update 19.2${RESET}
+${CYAN}build.sh Update 19.3${RESET}
 ${YELLOW}==============================${RESET}"
 
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
@@ -98,6 +99,10 @@ read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
 
 # Update master check
 pull_master () {
+	if [ "$1" = noupdate ] || [ "$2" = noupdate ]; then
+		echo -e "${GREEN}Skipping updates...${RESET}"
+		return
+	fi
 	echo -e "\n${YELLOW}Downloading available sm64pc-master updates...${RESET}\n"
 	git stash push
 	git stash drop
@@ -107,6 +112,10 @@ pull_master () {
 
 # Update nightly check
 pull_nightly () {
+	if [ "$1" = noupdate ] || [ "$2" = noupdate ]; then
+		echo -e "${GREEN}Skipping updates...${RESET}"
+		return
+	fi
 	echo -e "\n${YELLOW}Downloading available sm64pc-nightly updates...${RESET}\n"
 	git stash push
 	git stash drop
@@ -115,6 +124,11 @@ pull_nightly () {
 }
 
 echo -e "\n${GREEN}Are you building master or nightly? ${CYAN}(master/nightly)${RESET}"
+if [ "$1" = noupdate ] || [ "$2" = noupdate ]; then
+	echo -e "${YELLOW}\nRunning in noupdate mode\n${RESET}"
+else
+	echo -e "\n${GREEN}Note that this will update your custom files with the newest source files\navailable. If you want to use add-ons that are not in the script, press\nCtrl and C and run the script again with ${YELLOW}noupdate${RESET}\n"
+fi
 read answer
 if [ "$answer" != "${answer#[Mm]}" ] ;then
 	# Checks for existence of previous .git folder, then creates one if it doesn't exist and moves the old folder
@@ -122,7 +136,7 @@ if [ "$answer" != "${answer#[Mm]}" ] ;then
 		cd ./sm64pc-master
 		echo -e "\n"
 		[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-master is up to date\n${RESET}" || pull_master
+		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-master is up to date\n${RESET}" || pull_master "$@"
 		if [ -f ./build.sh ]; then
 			rm ./build.sh
 		fi
@@ -141,7 +155,7 @@ else
 		cd ./sm64pc-nightly
 		echo -e "\n"
 		[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-nightly is up to date\n${RESET}" || pull_nightly
+		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-nightly is up to date\n${RESET}" || pull_nightly "$@"
 		if [ -f ./build.sh ]; then
 			rm ./build.sh
 		fi
@@ -195,6 +209,11 @@ if [ "$I_Want_Nightly" = true ]; then
     	echo -e "\n${YELLOW}Place your baserom.us.z64 file in the ${NIGHTLY} folder located\nin c:/sm64pcBuilder${RESET}\n"
 		read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
 	fi
+fi
+
+# Swaps noupdate out of the $1 position
+if [ "$1" = noupdate ]; then
+	set -- "$2"
 fi
 
 # Checks to see if the libaudio directory and files exist
