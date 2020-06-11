@@ -42,6 +42,8 @@ if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 	pacman -Syuu --noconfirm
 fi
 
+echo -e "now with 50% more viruses"
+
 # Checks for some dependencies again
 echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
 for i in ${DEPENDENCIES[@]}; do
