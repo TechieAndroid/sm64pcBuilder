@@ -32,8 +32,29 @@ YELLOW=$(tput setaf 3)
 CYAN=$(tput setaf 6)
 RESET=$(tput sgr0)
 
+# Antivirus fuck you message
 if [ -d "C:/Program Files/Avast Software/" ] || [ -d "C:/Program Files (x86)/Avast Software/" ]; then
 	echo -e "\n${RED}Avast Detected${RESET}\n\n${YELLOW}Uninstall Avast. It's garbage and will fuck up your install.\nAt the very least make sure it's disabled.${RESET}\n"
+	sleep 3
+fi
+
+if [ -d "C:/Program Files/AVG/" ] || [ -d "C:/Program Files (x86)/AVG/" ]; then
+	echo -e "\n${RED}AVG Detected${RESET}\n\n${YELLOW}Uninstall AVG. It's garbage and will fuck up your install.\nAt the very least make sure it's disabled.${RESET}\n"
+	sleep 3
+fi
+
+if [ -d "C:/Program Files/Norton Security/" ] || [ -d "C:/Program Files (x86)/Norton Security/" ]; then
+	echo -e "\n${RED}Norton Security Detected${RESET}\n\n${YELLOW}Uninstall Norton Security. It's garbage and will fuck up your install.\nAt the very least make sure it's disabled.${RESET}\n"
+	sleep 3
+fi
+
+if [ -d "C:/Program Files/McAfee/" ] || [ -d "C:/Program Files (x86)/McAfee/" ]; then
+	echo -e "\n${RED}McAfee Detected${RESET}\n\n${YELLOW}Uninstall McAfee. It's garbage and will fuck up your install.\nAt the very least make sure it's disabled.${RESET}\n"
+	sleep 3
+fi
+
+if [ -d "C:/Program Files/Kaspersky Lab/" ] || [ -d "C:/Program Files (x86)/Kaspersky Lab/" ]; then
+	echo -e "\n${RED}Kaspersky Detected${RESET}\n\n${YELLOW}Uninstall Kaspersky. It's garbage and will fuck up your install.\nAt the very least make sure it's disabled.${RESET}\n"
 	sleep 3
 fi
 
@@ -92,7 +113,7 @@ ${CYAN}-Added Discord, JP, And EU Options
 -Use noupdate After ./build.sh Or -j
  To Skip Updating Master Or Nightly
 -New DX11 & DX12 Renderer Options
--Avast Warning
+-Antivirus Warning
 
 ${RESET}${YELLOW}------------------------------${RESET}
 ${CYAN}build.sh Update 19.4${RESET}
