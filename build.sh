@@ -629,7 +629,7 @@ done
 # Master flags menu
 if [ "$I_Want_Master" = true ]; then 
 	menu() {
-			printf "\nAvaliable options:\n"
+			printf "\nAvailable options:\n"
 			for i in ${!MASTER_OPTIONS[@]}; do 
 					printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${MASTER_OPTIONS[i]}"
 			done
@@ -659,7 +659,7 @@ fi
 # Nightly flags menu
 if [ "$I_Want_Nightly" = true ]; then 
 	menu() {
-			printf "\nAvaliable options:\n"
+			printf "\nAvailable options:\n"
 			for i in ${!NIGHTLY_OPTIONS[@]}; do 
 					printf "%3d%s) %s\n" $((i+1)) "${choices[i]:- }" "${NIGHTLY_OPTIONS[i]}"
 			done
