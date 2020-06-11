@@ -32,6 +32,11 @@ YELLOW=$(tput setaf 3)
 CYAN=$(tput setaf 6)
 RESET=$(tput sgr0)
 
+if [ -d "C:/Program Files/Avast Software/" ] || [ -d "C:/Program Files (x86)/Avast Software/" ]; then
+	echo -e "\n${RED}Avast Detected${RESET}\n\n${YELLOW}Uninstall Avast. It's garbage and will fuck up your install.\nAt the very least make sure it's disabled.${RESET}\n"
+	sleep 3
+fi
+
 # Checks for common required executables (make, git) and installs everything if they are missing
 if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 	echo -e "\n${RED}Dependencies are missing. Proceeding with the installation... ${RESET}\n" >&2
