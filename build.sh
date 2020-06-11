@@ -95,7 +95,7 @@ ${YELLOW}==============================${RESET}"
 
 read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
 
-# Gives options to download from the Github
+# Gives options to download from GitHub
 
 # Update master check
 pull_master () {
@@ -304,7 +304,7 @@ ${CYAN}Press a number to select:
 
 (1) 60 FPS Patch (WIP)
 (2) 60 FPS Patch Uncapped Framerate (WIP)
-(3) Dont Exit From Star Patch
+(3) Don't Exit From Star Patch
 (4) Download Reshade - Post processing effects
 (C)ontinue
 
@@ -339,13 +339,13 @@ ${RESET}${YELLOW}------------------------------${RESET}"
             ;;
     "3")  if [[ -f "./enhancements/DontExitFromStar.patch" ]]; then
 			git apply ./enhancements/DontExitFromStar.patch --ignore-whitespace --reject
-			echo -e "$\n${GREEN}Dont Exit From Star Patch Selected${RESET}\n"
+			echo -e "$\n${GREEN}Don't Exit From Star Patch Selected${RESET}\n"
 		  else
 		  	cd ./enhancements
 		  	wget https://cdn.discordapp.com/attachments/718584345912148100/720292073798107156/DontExitFromStar.patch
 		  	cd ../
 		  	git apply ./enhancements/DontExitFromStar.patch --ignore-whitespace --reject
-		  	echo -e "$\n${GREEN}Dont Exit From Star Patch Selected${RESET}\n"
+		  	echo -e "$\n${GREEN}Don't Exit From Star Patch Selected${RESET}\n"
 		  fi
 		  sleep 2
             ;;
@@ -627,7 +627,7 @@ done
 done
 
 # Master flags menu
-if [ "$I_Want_Master" = true ]; then 
+if [ "$I_Want_Master" = true ]; then
 	menu() {
 			printf "\nAvailable options:\n"
 			for i in ${!MASTER_OPTIONS[@]}; do 
@@ -638,7 +638,7 @@ if [ "$I_Want_Master" = true ]; then
 			printf "${RED}WARNING: Backup your save file before selecting \"Clean build\".\n"
 			printf "${CYAN}Press the corresponding number and press enter to select it.\nWhen all desired options are selected, press Enter to continue.\n"
 			printf "${RED}RUN \"Clean build\" REGULARLY.\n"
-			printf "Everytime you want to update to a newer version or build with different options\nyou have to choose the option \"Clean build\" or manually remove or rename\nsm64pc-master/build or sm64pc-nightly/build\n"
+			printf "Every time you want to update to a newer version or build with different options\nyou have to choose the option \"Clean build\" or manually remove or rename\nsm64pc-master/build or sm64pc-nightly/build\n"
 			printf "${YELLOW}Check Remove Extended Options Menu & leave other options unchecked for a Vanilla\nbuild.\n${RESET}"
 	}
 
@@ -657,7 +657,7 @@ if [ "$I_Want_Master" = true ]; then
 fi
 
 # Nightly flags menu
-if [ "$I_Want_Nightly" = true ]; then 
+if [ "$I_Want_Nightly" = true ]; then
 	menu() {
 			printf "\nAvailable options:\n"
 			for i in ${!NIGHTLY_OPTIONS[@]}; do 
@@ -668,7 +668,7 @@ if [ "$I_Want_Nightly" = true ]; then
 			printf "${RED}WARNING: Backup your save file before selecting \"Clean build\".\n"
 			printf "${CYAN}Press the corresponding number and press enter to select it.\nWhen all desired options are selected, press Enter to continue.\n"
 			printf "${RED}RUN \"Clean build\" REGULARLY.\n"
-			printf "Everytime you want to update to a newer version or build with different options\nyou have to choose the option \"Clean build\" or manually remove or rename\nsm64pc-master/build or sm64pc-nightly/build\n"
+			printf "Every time you want to update to a newer version or build with different options\nyou have to choose the option \"Clean build\" or manually remove or rename\nsm64pc-master/build or sm64pc-nightly/build\n"
 			printf "${YELLOW}Check Remove Extended Options Menu & leave other options unchecked for a Vanilla\nbuild.\n${RESET}"
 	}
 
