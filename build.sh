@@ -69,7 +69,7 @@ pull_sm64pcbuilder () {
 	git pull https://github.com/gunvalk/sm64pcBuilder
 	echo -e "\n${GREEN}Restarting...${RESET}\n"
 	sleep 2
-	exec ./build.sh $1 $2
+	exec ./build.sh "$@"
 }
 
 [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
