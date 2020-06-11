@@ -42,8 +42,6 @@ if  [[ ! $(command -v make) || ! $(command -v git) ]]; then
 	pacman -Syuu --noconfirm
 fi
 
-echo -e "leggo my eggo"
-
 # Checks for some dependencies again
 echo -e "\n${YELLOW}Checking dependencies... ${RESET}\n"
 for i in ${DEPENDENCIES[@]}; do
@@ -71,7 +69,7 @@ pull_sm64pcbuilder () {
 	git pull https://github.com/gunvalk/sm64pcBuilder
 	echo -e "\n${GREEN}Restarting...${RESET}\n"
 	sleep 2
-	exec ./build.sh $1
+	exec ./build.sh $1 $2
 }
 
 [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
