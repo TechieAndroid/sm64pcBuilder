@@ -102,8 +102,8 @@ pull_sm64pcbuilder () {
 	exec ./build.sh "$@"
 }
 
-[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh is up to date\n${RESET}" || pull_sm64pcbuilder "$@"
+#[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
+#sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh is up to date\n${RESET}" || pull_sm64pcbuilder "$@"
 
 # Update message
 echo \
@@ -249,8 +249,8 @@ fi
 # Checks to see if the libaudio directory and files exist
 if [ -d "${LIBDIR}" -a -e "${LIBDIR}${LIBAFA}" -a -e "${LIBDIR}${LIBAFLA}"  ]; then
     echo -e "\n${GREEN}libaudio files exist, going straight to compiling.${RESET}\n"
-else 
-    echo -e "\n${GREEN}libaudio files not found, starting initialization process.${RESET}\n\n"
+elif [ "$I_Want_Master" = true ]; then
+	echo -e "\n${GREEN}libaudio files not found, starting initialization process.${RESET}\n\n"
 
     echo -e "${YELLOW} Changing directory to: ${CYAN}${AUDDIR}${RESET}\n\n"
 	cd $AUDDIR
