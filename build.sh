@@ -180,35 +180,31 @@ if [ "$answer" != "${answer#[Mm]}" ] ;then
 		git clone git://github.com/sm64pc/sm64pc sm64pc-master
 		I_Want_Master=true
 	fi
-else
-	if [ -d "$NIGHTLY_GIT" ]; then
-		cd ./sm64pc-nightly
+elif [ -d "$NIGHTLY_GIT" ]; then
+	cd ./sm64pc-nightly
+	echo -e "\n"
+	[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
+	sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-nightly is up to date\n${RESET}" || pull_nightly "$@"
+	if [ -f ./build.sh ]; then
+		rm ./build.sh
+	fi
+	I_Want_Nightly=true
+	cd ../
+	elif [ -d "$NIGHTLY" ]; then
 		echo -e "\n"
-		[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-nightly is up to date\n${RESET}" || pull_nightly "$@"
-		if [ -f ./build.sh ]; then
-			rm ./build.sh
+		mv sm64pc-nightly sm64pc-nightly.old
+		git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+		if [ -f ./sm64pc-nightly/build.sh ]; then
+			rm ./sm64pc-nightly/build.sh
 		fi
 		I_Want_Nightly=true
-		cd ../
 	else
-		if [ -d "$NIGHTLY" ]; then
-			echo -e "\n"
-			mv sm64pc-nightly sm64pc-nightly.old
-			git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
-			if [ -f ./sm64pc-nightly/build.sh ]; then
-				rm ./sm64pc-nightly/build.sh
-			fi
-			I_Want_Nightly=true
-		else
-			echo -e "\n"
-			git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
-			if [ -f ./sm64pc-nightly/build.sh ]; then
-				rm ./sm64pc-nightly/build.sh
-			fi
-			I_Want_Nightly=true
+		echo -e "\n"
+		git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+		if [ -f ./sm64pc-nightly/build.sh ]; then
+			rm ./sm64pc-nightly/build.sh
 		fi
-	fi
+		I_Want_Nightly=true
 fi
 
 # Checks for a pre-existing baserom file in old folder then moves it to the new one
