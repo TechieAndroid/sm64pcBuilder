@@ -211,19 +211,6 @@ else
 	fi
 fi
 
-# Checks if user has spaces in their directory
-if [ -f "./enhancements/328.patch" && $TESTDIR" -gt "0" ]; then
-	git apply ./enhancements/328.patch  --ignore-whitespace --reject
-	echo -e "$\n${GREEN}Dir Spaces Patch Applied${RESET}\n"
-elif [ ! -f "./enhancements/328.patch" && $TESTDIR" -gt "0" ]; then
-	cd ./enhancements
-	wget https://github.com/sm64pc/sm64pc/pull/328.patch
-	cd ../
-	git apply ./enhancements/328.patch --ignore-whitespace --reject
-	echo -e "$\n${GREEN}Dir Spaces Patch Applied${RESET}\n"
-	sleep 2
-fi
-
 # Checks for a pre-existing baserom file in old folder then moves it to the new one
 if [ -f "$MASTER_OLD" ]; then
     mv sm64pc-master.old/baserom.us.z64 sm64pc-master/baserom.us.z64
