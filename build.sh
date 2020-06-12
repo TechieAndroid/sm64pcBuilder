@@ -222,6 +222,8 @@ elif [ ! -f "./enhancements/328.patch" && $TESTDIR" -gt "0" ]; then
 	git apply ./enhancements/328.patch --ignore-whitespace --reject
 	echo -e "$\n${GREEN}Dir Spaces Patch Applied${RESET}\n"
 	sleep 2
+else
+exec ./tools/audiofile/autogen.sh && make && make install
 fi
 
 # Checks for a pre-existing baserom file in old folder then moves it to the new one
