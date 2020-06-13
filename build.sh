@@ -127,7 +127,7 @@ Updates:
  Selection
 
 ------------------------------
-build.sh Update 19.4"
+build.sh Update 19.5"
 fi
 
 # Gives options to download from GitHub
