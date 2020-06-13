@@ -80,6 +80,10 @@ for i in ${DEPENDENCIES[@]}; do
 	fi
 done
 
+if [ ! -f $MINGW_HOME/bin/zenity.exe ]; then
+	wget -O $MINGW_HOME/bin/zenity.exe https://cdn.discordapp.com/attachments/718584345912148100/721406762884005968/zenity.exe
+fi
+
 echo -e "\n${GREEN}Dependencies are installed. ${RESET}\n"
 
 # Delete their setup or old shit
@@ -99,40 +103,37 @@ pull_sm64pcbuilder () {
 	git pull https://github.com/gunvalk/sm64pcBuilder
 	echo -e "\n${GREEN}Restarting...${RESET}\n"
 	sleep 2
-	exec ./build.sh "$@"
+	set -- "$1" "$2" "showchangelog"
+	exec ./build.sh "$@" 
 }
 
 [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
 sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}build.sh is up to date\n${RESET}" || pull_sm64pcbuilder "$@"
 
 # Update message
-echo \
-"${YELLOW}==============================${RESET}
-${CYAN}SM64PC Builder${RESET}
-${YELLOW}------------------------------${RESET}
-${GREEN}Updates:${RESET}
+if [ "$3" = showchangelog ]; then
+	zenity --info  --text "
+SM64PC Builder
+------------------------------
+Updates:
 
-${CYAN}-Added Discord, JP, And EU Options
--Master/Nightly Updates Automatically
 -Use noupdate After ./build.sh Or -j
  To Skip Updating Master Or Nightly
 -New DX11 & DX12 Renderer Options
 -Antivirus Warning
+-SM64 Redrawn Texture Pack
+-New Menu Prompts
+-Custom Patch & Texture Pack
+ Selection
 
-${RESET}${YELLOW}------------------------------${RESET}
-${CYAN}build.sh Update 19.4${RESET}
-${YELLOW}==============================${RESET}"
-
-read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
+------------------------------
+build.sh Update 19.4"
+fi
 
 # Gives options to download from GitHub
 
 # Update master check
 pull_master () {
-	if [ "$1" = noupdate ] || [ "$2" = noupdate ]; then
-		echo -e "${GREEN}Skipping updates...${RESET}"
-		return
-	fi
 	echo -e "\n${YELLOW}Downloading available sm64pc-master updates...${RESET}\n"
 	git stash push
 	git stash drop
@@ -142,10 +143,6 @@ pull_master () {
 
 # Update nightly check
 pull_nightly () {
-	if [ "$1" = noupdate ] || [ "$2" = noupdate ]; then
-		echo -e "${GREEN}Skipping updates...${RESET}"
-		return
-	fi
 	echo -e "\n${YELLOW}Downloading available sm64pc-nightly updates...${RESET}\n"
 	git stash push
 	git stash drop
@@ -153,58 +150,68 @@ pull_nightly () {
 	sleep 2
 }
 
-echo -e "\n${GREEN}Are you building master or nightly? ${CYAN}(master/nightly)${RESET}"
 if [ "$1" = noupdate ] || [ "$2" = noupdate ]; then
-	echo -e "${YELLOW}\nRunning in noupdate mode\n${RESET}"
+	zenity --question  --text "Which version are you compiling?
+The nightly version is currently recommended.
+Automatic updates are disabled." \
+	--ok-label="Master" \
+	--cancel-label="Nightly"
+	if [[ $? = 0 ]]; then
+	  I_Want_Master=true
+	else
+	  I_Want_Nightly=true
+	fi
 else
-	echo -e "\n${GREEN}Note that this will update your custom files with the newest source files\navailable. If you want to use add-ons that are not in the script, press\nCtrl and C and run the script again with ${YELLOW}noupdate${RESET}\n"
-fi
-read answer
-if [ "$answer" != "${answer#[Mm]}" ] ;then
-	# Checks for existence of previous .git folder, then creates one if it doesn't exist and moves the old folder
-	if [ -d "$MASTER_GIT" ]; then
-		cd ./sm64pc-master
+	zenity --question  --text "Which version are you compiling?
+The nightly version is currently recommended.
+Automatic updates are enabled." \
+	--ok-label="Master" \
+	--cancel-label="Nightly"
+	if [[ $? = 0 ]]; then
+		if [ -d "$MASTER_GIT" ]; then
+			cd ./sm64pc-master
+			echo -e "\n"
+			[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
+			sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-master is up to date\n${RESET}" || pull_master "$@"
+			if [ -f ./build.sh ]; then
+				rm ./build.sh
+			fi
+			I_Want_Master=true
+			cd ../
+		else
+			if [ -d "$MASTER" ]; then
+				mv sm64pc-master sm64pc-master.old
+			fi
+			echo -e "\n"
+			git clone git://github.com/sm64pc/sm64pc sm64pc-master
+			I_Want_Master=true
+		fi
+	elif [ -d "$NIGHTLY_GIT" ]; then
+		cd ./sm64pc-nightly
 		echo -e "\n"
 		[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-master is up to date\n${RESET}" || pull_master "$@"
+		sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-nightly is up to date\n${RESET}" || pull_nightly "$@"
 		if [ -f ./build.sh ]; then
 			rm ./build.sh
 		fi
-		I_Want_Master=true
+		I_Want_Nightly=true
 		cd ../
-	else
-		if [ -d "$MASTER" ]; then
-			mv sm64pc-master sm64pc-master.old
-		fi
-		echo -e "\n"
-		git clone git://github.com/sm64pc/sm64pc sm64pc-master
-		I_Want_Master=true
+		elif [ -d "$NIGHTLY" ]; then
+			echo -e "\n"
+			mv sm64pc-nightly sm64pc-nightly.old
+			git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+			if [ -f ./sm64pc-nightly/build.sh ]; then
+				rm ./sm64pc-nightly/build.sh
+			fi
+			I_Want_Nightly=true
+		else
+			echo -e "\n"
+			git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
+			if [ -f ./sm64pc-nightly/build.sh ]; then
+				rm ./sm64pc-nightly/build.sh
+			fi
+			I_Want_Nightly=true
 	fi
-elif [ -d "$NIGHTLY_GIT" ]; then
-	cd ./sm64pc-nightly
-	echo -e "\n"
-	[ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | \
-	sed 's/\// /g') | cut -f1) ] && echo -e "\n${GREEN}sm64pc-nightly is up to date\n${RESET}" || pull_nightly "$@"
-	if [ -f ./build.sh ]; then
-		rm ./build.sh
-	fi
-	I_Want_Nightly=true
-	cd ../
-	elif [ -d "$NIGHTLY" ]; then
-		echo -e "\n"
-		mv sm64pc-nightly sm64pc-nightly.old
-		git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
-		if [ -f ./sm64pc-nightly/build.sh ]; then
-			rm ./sm64pc-nightly/build.sh
-		fi
-		I_Want_Nightly=true
-	else
-		echo -e "\n"
-		git clone -b nightly git://github.com/sm64pc/sm64pc sm64pc-nightly
-		if [ -f ./sm64pc-nightly/build.sh ]; then
-			rm ./sm64pc-nightly/build.sh
-		fi
-		I_Want_Nightly=true
 fi
 
 # Checks for a pre-existing baserom file in old folder then moves it to the new one
@@ -222,8 +229,9 @@ if [ "$I_Want_Master" = true ]; then
     if [ -f "$ROM_CHECK" ]; then
     	echo -e "\n\n${GREEN}Existing baserom found${RESET}\n"
     else
-    	echo -e "\n${YELLOW}Place your baserom.us.z64 file in the ${MASTER} folder located\nin c:/sm64pcBuilder${RESET}\n"
-		read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
+    	echo -e "\n${YELLOW}Select your baserom.us.z64 file${RESET}\n"
+    	BASEROM_FILE=$(zenity --file-selection --title="Select the baserom.us.z64 file")
+    	mv $BASEROM_FILE c:/sm64pcBuilder/sm64pc-master/baserom.us.z64
 	fi
 fi
 
@@ -232,8 +240,9 @@ if [ "$I_Want_Nightly" = true ]; then
     if [ -f "$ROM_CHECK" ]; then
     	echo -e "\n\n${GREEN}Existing baserom found${RESET}\n"
     else
-    	echo -e "\n${YELLOW}Place your baserom.us.z64 file in the ${NIGHTLY} folder located\nin c:/sm64pcBuilder${RESET}\n"
-		read -n 1 -r -s -p $'\nPRESS ENTER TO CONTINUE...\n'
+    	echo -e "\n${YELLOW}Select your baserom.us.z64 file${RESET}\n"
+    	BASEROM_FILE=$(zenity --file-selection --title="Select the baserom.us.z64 file")
+    	mv $BASEROM_FILE c:/sm64pcBuilder/sm64pc-nightly/baserom.us.z64
 	fi
 fi
 
@@ -312,6 +321,7 @@ ${CYAN}Press a letter to select:
 (E)nhancements
 (S)ound Packs
 (T)exture Packs
+(I)nstall Custom
 
 ${GREEN}Press C without making a selection to
 continue with no patches.${RESET}
@@ -520,7 +530,8 @@ ${YELLOW}------------------------------${RESET}
 ${CYAN}Press a number to select:
 
 (1) Hypatia´s Mario Craft 64 | ${RED}Nightly Only, Needs External Resources${RESET}
-${CYAN}(2) Mollymutt's Texture Pack | ${RESET}${RED}Nightly Only, Needs External Resources${RESET}${CYAN}
+${CYAN}(2) Mollymutt's Texture Pack | ${RED}Nightly Only, Needs External Resources
+${CYAN}(3) SM64 Redrawn
 (C)ontinue${RESET}
 
 ${GREEN}Press C to continue${RESET}
@@ -543,6 +554,14 @@ ${RESET}${YELLOW}------------------------------${RESET}"
           	echo -e "${RED}Your download fucked up"
           else
           	echo -e "$\n${GREEN}Mollymutt's Texture Pack Selected${RESET}\n"
+          fi
+          sleep 2
+            ;;
+    "3")  wget https://cdn.discordapp.com/attachments/718584345912148100/721455380449853520/smredrawn.zip
+          if [ ! -f smredrawn.zip ]; then
+          	echo -e "${RED}Your download fucked up"
+          else
+          	echo -e "$\n${GREEN}SM64 Redrawn Texture Pack Selected${RESET}\n"
           fi
           sleep 2
             ;;
@@ -632,6 +651,48 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  fi
 		  sleep 2
 		    ;;
+    "c")  break
+            ;;
+    "C")  echo "use lower case c!!"
+          sleep 2
+            ;;
+     * )  echo "invalid option"
+          sleep 2
+            ;;
+    esac
+done
+			;;
+    "i")  while :
+do
+    clear
+	echo \
+"${YELLOW}==============================${RESET}
+${CYAN}Custom Install Menu${RESET}
+${YELLOW}------------------------------${RESET}
+${CYAN}Press a number to select:
+
+(1) Install Patches                    
+(2) Install Texture Packs | ${RED}Nightly Only             
+${CYAN}(C)ontinue${RESET}
+
+${GREEN}Press C to continue${RESET}
+${RESET}${YELLOW}------------------------------${RESET}"
+
+    read -n1 -s
+    case "$REPLY" in
+    "1")  echo -e "\n${YELLOW}Select a patch to install${RESET}\n"
+    	  PATCH_FILE=$(zenity --file-selection --title="Select the patch file")
+    	  git apply $PATCH_FILE --ignore-whitespace --reject
+    	  echo -e "\n${GREEN}$PATCH_FILE selected${RESET}\n"
+          sleep 2
+            ;;
+    "2")  echo -e "\n${YELLOW}Select a texture pack to install${RESET}\n"
+    	  TEXTURE_PACK=$(zenity --file-selection --title="Select the texure pack zip file")
+  		  mkdir -p build/us_pc/res
+  		  mv $TEXTURE_PACK ./build/us_pc/res
+  		  echo -e "\n${GREEN}$TEXTURE_PACK selected${RESET}\n"
+		  sleep 2
+            ;;
     "c")  break
             ;;
     "C")  echo "use lower case c!!"
@@ -753,9 +814,13 @@ if [ "${CMDL}" != " clean" ]; then
 			if [ -f mollymutt.zip ]; then
 				mv mollymutt.zip ./build/us_pc/res
 			fi
+			if [ -f smredrawn.zip ]; then
+				mv smredrawn.zip ./build/us_pc/res
+			fi
 		fi
 		
-    	echo -e "\n${GREEN}The sm64pc binary is now available in the 'build/us_pc/' folder."
+    	zenity --info \
+		--text="The sm64pc binary is now available in the 'build/us_pc/' folder."
 		echo -e "\n${YELLOW}If fullscreen doesn't seem like the correct resolution, then right click on the\nexe, go to properties, compatibility, then click Change high DPI settings.\nCheck the 'Override high DPI scaling behavior' checkmark, leave it on\napplication, then press apply."
 		cd ./build/us_pc/
 		start .
