@@ -578,6 +578,8 @@ ${RESET}${YELLOW}------------------------------${RESET}"
 		  if [ -f $APPDATA/sm64pc/sm64_save_file.bin ]; then
 		  	mv -f $APPDATA/sm64pc/sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.old.bin
 		  	mv sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.bin
+		  else
+		  	mv sm64_save_file.bin $APPDATA/sm64pc/sm64_save_file.bin
 		  fi
 		  echo -e "$\n${GREEN}120 Star Save Selected${RESET}\n"
 		  sleep 2
